@@ -73,7 +73,7 @@ export function BrowserFrame({ src, title, className }: BrowserFrameProps) {
           type="button"
           onClick={() => setReloadKey((key) => key + 1)}
           aria-label="Reload the preview"
-          className="text-ink-quaternary hover:text-ink shrink-0 transition-colors"
+          className="text-ink-quaternary hover:text-ink -m-2 shrink-0 p-2 transition-colors"
         >
           <RotateCw size={12} strokeWidth={1.75} aria-hidden="true" />
         </button>

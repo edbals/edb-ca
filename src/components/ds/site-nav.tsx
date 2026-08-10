@@ -266,8 +266,23 @@ export function SiteNav({
             ))}
           </ul>
 
+          {/* Desktop keeps this as a permanent pill beside the hamburger;
+              the sheet is the only other place a mobile reader can reach it,
+              so it gets the same visual weight here rather than being
+              folded into the plain secondary list below. */}
+          {cta ? (
+            <a
+              href={cta.href}
+              {...externalLinkProps(cta.external)}
+              onClick={() => setOpen(false)}
+              className="micro rounded-pill bg-ink text-ink-inverse mt-8 inline-flex w-fit items-center px-5 py-3 transition-opacity hover:opacity-85"
+            >
+              {cta.label}
+            </a>
+          ) : null}
+
           {secondaryLinks.length > 0 ? (
-            <ul className="mt-10 flex flex-col gap-2">
+            <ul className="mt-6 flex flex-col gap-2">
               {secondaryLinks.map((link) => (
                 <li key={link.href}>
                   <a

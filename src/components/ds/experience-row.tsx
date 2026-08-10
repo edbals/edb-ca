@@ -82,10 +82,12 @@ export function ExperienceRow({
       </div>
 
       {href ? (
-        // A second line of metadata that only exists on hover: the row
-        // reads as plain text at rest and only admits it is a link once
-        // the reader is already pointing at it.
-        <span className="micro ml-auto flex shrink-0 items-center gap-1.5 pl-2 text-ink-tertiary opacity-0 transition-[opacity,transform] duration-300 ease-out -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100">
+        // On a pointer device this stays hidden until hover, the same
+        // metadata-on-hover treatment as the rest of the site. Touch has no
+        // hover to reveal it with, so below `md` it sits dimly visible at
+        // rest instead, the only way a tap target gets to announce itself
+        // before it's tapped.
+        <span className="micro ml-auto flex shrink-0 items-center gap-1.5 pl-2 text-ink-tertiary opacity-50 transition-[opacity,transform] duration-300 ease-out md:-translate-x-1 md:opacity-0 md:group-hover:translate-x-0 md:group-hover:opacity-100">
           Visit
           <ArrowUpRight size={12} strokeWidth={1.75} aria-hidden="true" />
         </span>

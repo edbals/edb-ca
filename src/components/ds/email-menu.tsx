@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { EMAIL_PROVIDERS } from '@/lib/email-providers'
@@ -35,24 +35,43 @@ export function EmailMenu({
   const isAbove = placement === 'top'
   const [isOpen, setIsOpen] = useState(false)
   const [hasCopied, setHasCopied] = useState(false)
+  // The panel is always anchored to the trigger's left edge, so a trigger
+  // sitting in the right half of a narrow screen would otherwise push it
+  // straight past the viewport edge. Shifted left just enough to stay on
+  // screen, never right beyond its natural position.
+  const [shiftX, setShiftX] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
   const menuId = useId()
   const prefersReducedMotion = useReducedMotion()
+
+  useLayoutEffect(() => {
+    // Nothing to correct while closed: the motion.div this offset applies
+    // to is unmounted along with it, so a stale value sits inert until the
+    // next open re-measures and overwrites it before paint.
+    if (!isOpen) return
+    const menu = menuRef.current
+    if (!menu) return
+    const EDGE_MARGIN = 12
+    const rect = menu.getBoundingClientRect()
+    const overflow = rect.right + EDGE_MARGIN - window.innerWidth
+    setShiftX(overflow > 0 ? -overflow : 0)
+  }, [isOpen])
 
   useEffect(() => {
     if (!isOpen) return
 
-    const onPointerDown = (event: MouseEvent) => {
+    const onPointerDown = (event: PointerEvent) => {
       if (!containerRef.current?.contains(event.target as Node)) setIsOpen(false)
     }
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setIsOpen(false)
     }
 
-    document.addEventListener('mousedown', onPointerDown)
+    document.addEventListener('pointerdown', onPointerDown)
     document.addEventListener('keydown', onKeyDown)
     return () => {
-      document.removeEventListener('mousedown', onPointerDown)
+      document.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('keydown', onKeyDown)
     }
   }, [isOpen])
@@ -90,8 +109,13 @@ export function EmailMenu({
       <AnimatePresence>
         {isOpen ? (
           <motion.div
+            ref={menuRef}
             id={menuId}
             role="menu"
+            // A static offset, not an animated one: it corrects a position,
+            // it doesn't perform, so it stays outside the opacity/y/scale
+            // reveal below and can't introduce its own flash or jump.
+            style={{ x: shiftX }}
             initial={
               prefersReducedMotion
                 ? { opacity: 0 }

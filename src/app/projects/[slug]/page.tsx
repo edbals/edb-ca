@@ -76,14 +76,37 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           document={
             <MediaFrame aspect={project.liveUrl ? undefined : '16/10'}>
               {project.liveUrl ? (
-                /* A browser window rather than a picture frame: this is a
-                   tool to be used in place, and a letterboxed strip leaves
-                   nowhere to actually read the interface. */
-                <BrowserFrame
-                  src={project.liveUrl}
-                  title={`${project.title}, live preview`}
-                  className="h-[78vh] min-h-[34rem] w-full overflow-hidden"
-                />
+                <>
+                  {/* Below md, SitePreview would still be scaling a 1440px
+                      desktop layout down to fit the phone's width, past the
+                      point of being readable rather than merely small. The
+                      button above already puts the real tool one tap away
+                      in its own full tab, so mobile gets the artwork instead
+                      of a shrunken, illegible copy of it. */}
+                  <div className="relative aspect-[16/10] w-full md:hidden">
+                    <Image
+                      src={project.thumbnail}
+                      alt={`${project.title} preview`}
+                      fill
+                      sizes="100vw"
+                      className="object-cover"
+                    />
+                    <span className="micro bg-paper text-ink absolute top-3 left-3 rounded-pill px-3 py-1.5">
+                      Best on a larger screen
+                    </span>
+                  </div>
+
+                  {/* A browser window rather than a picture frame: this is a
+                      tool to be used in place, and a letterboxed strip
+                      leaves nowhere to actually read the interface. */}
+                  <div className="hidden h-[78vh] min-h-[34rem] w-full overflow-hidden md:block">
+                    <BrowserFrame
+                      src={project.liveUrl}
+                      title={`${project.title}, live preview`}
+                      className="size-full"
+                    />
+                  </div>
+                </>
               ) : project.visual === 'payoff' ? (
                 <PayoffThumbnail />
               ) : (
