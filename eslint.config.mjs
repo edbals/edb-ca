@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Design references kept for provenance, not app source.
+    "personal-portfolio-system/**",
+    "inspo v3/**",
   ]),
 ]);
 

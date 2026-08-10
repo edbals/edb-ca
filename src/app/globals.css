@@ -1,26 +1,314 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   EDBERT SUNARPO , DESIGN SYSTEM
+   Tailwind v4, CSS-first. No tailwind.config.
+   Light only: warm paper canvas with ink editorial bands.
+   ============================================================ */
+
+@theme {
+  /* ---------- Type families ---------- */
+  --font-serif: var(--font-instrument-serif), 'Times New Roman', Times, serif;
+  --font-sans: var(--font-instrument-sans), 'Helvetica Neue', Arial, sans-serif;
+  --font-accent: var(--font-space-grotesk), var(--font-instrument-sans), sans-serif;
+
+  /* ---------- Type scale (fluid, editorial) ---------- */
+  /* The whole scale is set one step back from its original size, so more
+     of the page reads at once without any single element being resized on
+     its own. Display type takes the full reduction; body copy takes less,
+     since running text stops being comfortable below about 15px. */
+  /* Ceiling raised from 6.4rem: the hero is the only thing that uses this
+     token, and on wide desktop the line was capping out well before the
+     column had room to keep growing, leaving flat space beside it. */
+  --text-display: clamp(2.1rem, 8.25vw, 7.5rem);
+  --text-display--line-height: 0.94;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-heading-lg: clamp(1.7rem, 5.25vw, 3.4rem);
+  --text-heading-lg--line-height: 1;
+  --text-heading-lg--letter-spacing: -0.015em;
+
+  --text-heading: clamp(1.35rem, 3.4vw, 2.1rem);
+  --text-heading--line-height: 1.08;
+  --text-heading--letter-spacing: -0.01em;
+
+  --text-subheading: clamp(1.1rem, 2.25vw, 1.35rem);
+  --text-subheading--line-height: 1.2;
+
+  --text-title: 0.9375rem;
+  --text-title--line-height: 1.4;
+
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.6;
+
+  --text-body-sm: 0.8125rem;
+  --text-body-sm--line-height: 1.55;
+
+  /* ---------- Radii ---------- */
+  --radius-button: 0.125rem;
+  --radius-pill: 999px;
+  --radius-image: 0.75rem;
+  --radius-round: 50%;
+
+  /* ---------- Colors (light is the source of truth) ---------- */
+  --color-paper: #f0efe5;
+  --color-paper-raised: #f7f6ef;
+  --color-ink: #252522;
+  --color-ink-secondary: #4c4a44;
+  --color-ink-tertiary: #7d7a71;
+  --color-ink-quaternary: #a8a49a;
+  --color-ink-inverse: #f0efe5;
+  --color-sage: #cedad7;
+  --color-smoked-wood: #393430;
+  --color-rule: #d8d6c9;
+  --color-rule-strong: #b9b6a7;
+  --color-wash: #e6e4d8;
+
+  /* ---------- Motion ----------
+     One curve carries almost everything: a long, decelerating settle that
+     arrives quickly and comes to rest slowly, so type appears to be placed
+     on the page rather than flown in. `--ease-rule` is symmetric, used for
+     hairlines drawing themselves, which should read as a single stroke.
+     These were referenced before they existed, which silently invalidated
+     every transition that used them. */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-rule: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ------------------------------------------------------------
+   BASE
+   ------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Clear the floating nav when jumping to an anchor. */
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--color-sage);
+    color: #252522;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    text-wrap: balance;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ------------------------------------------------------------
+   HERO SIGNATURE
+   The wordmark is drawn on like handwriting: each glyph traces its
+   outline, then the fill arrives behind it, then the whole line
+   clears so the loop can start again. Every path is normalised with
+   pathLength="1", so one keyframe set fits glyphs of any length.
+   ------------------------------------------------------------ */
+
+@keyframes signature-draw {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  28% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  96% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+}
+
+@keyframes signature-fill {
+  0%,
+  20% {
+    fill-opacity: 0;
+  }
+  42%,
+  86% {
+    fill-opacity: 1;
+  }
+  96%,
+  100% {
+    fill-opacity: 0;
+  }
+}
+
+.signature-glyph {
+  fill: var(--color-ink);
+  fill-opacity: 0;
+  stroke: var(--color-ink);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    signature-draw var(--signature-loop, 6s) var(--signature-delay, 0s) linear infinite,
+    signature-fill var(--signature-loop, 6s) var(--signature-delay, 0s) linear infinite;
+}
+
+/* Anyone who has asked for less motion gets the finished wordmark,
+   set solid, with no drawing and no loop. */
+@media (prefers-reduced-motion: reduce) {
+  .signature-glyph {
+    animation: none;
+    fill-opacity: 1;
+    stroke-width: 0;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------
+   UTILITIES
+   ------------------------------------------------------------ */
+
+/* 11px uppercase micro-label , used for numbers, meta, eyebrows */
+@utility micro {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Figures, source lines, and chart furniture: the sans with lining,
+   tabular numerals so columns of numbers stay aligned. */
+@utility mono-data {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+/* Underline-only link: a hairline sits under the text at rest, matching
+   every other rule on the page, and a second stroke draws in from the
+   left on hover rather than the rule simply changing color. Same device
+   as `AnimatedRule`, at hover speed instead of scroll speed. */
+@utility link-rule {
+  position: relative;
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--color-rule-strong);
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -1px 0;
+    height: 1px;
+    background-color: var(--color-ink);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 320ms var(--ease-standard);
+  }
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Full-bleed dark band: re-scopes the SAME token names locally,
+   so any component nested inside inverts without knowing about it. */
+@utility band-dark {
+  --color-paper: #252522;
+  --color-paper-raised: #302c28;
+  --color-ink: #f0efe5;
+  --color-ink-secondary: #cbc7bb;
+  --color-ink-tertiary: #969185;
+  --color-ink-quaternary: #6e6a62;
+  --color-ink-inverse: #252522;
+  --color-rule: #3c3833;
+  --color-rule-strong: #55504a;
+  --color-wash: #2c2926;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* Frosted nav only. Falls back to solid when transparency is reduced. */
+@utility glass {
+  background-color: color-mix(in oklab, var(--color-paper) 72%, transparent);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background-color: var(--color-paper-raised);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Editorial grid: 7 cols desktop / 4 tablet / 2 mobile */
+@utility grid-editorial {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  @media (width >= 48rem) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+  @media (width >= 80rem) {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 30px;
+  }
+}
+
+/* Page gutters mirroring the reference: 16 / 20 / 30 */
+@utility shell {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 90rem;
+  padding-inline: 16px;
+  @media (width >= 48rem) {
+    padding-inline: 20px;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 30px;
+  }
+}
+
+/* ------------------------------------------------------------
+   MOTION
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -39,3 +39,20 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Design references, not app source
+/personal-portfolio-system
+/inspo v3
+
+# Personal planning docs, not portfolio source
+*.pptx
+*.docx
+instructions*.pdf
+CONTENT-BRIEF.md
+COPY.md
+DESIGN.md
+REWRITE.md
+Purpose_AI_Stocks_Pivot.md
+
+# Local dev tool config, not site content
+.mcp.json
