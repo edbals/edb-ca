@@ -31,12 +31,12 @@ function sectionId(href: string): string {
 }
 
 /**
- * A sticky key bar: wordmark, section keys, LinkedIn, résumé. Every control is
- * the same key, distinguished by label colour rather than by shape.
+ * A sticky key bar: wordmark, section keys, LinkedIn, résumé.
  *
- * The current section's key stays latched (held down), which is how a terminal
- * marks an active function , so the bar needs no separate indicator sliding
- * around behind the labels.
+ * The current section carries no visual marker. The scrollspy is kept anyway
+ * because it still sets `aria-current`, which is how a screen reader announces
+ * where in the page the reader is , that costs nothing on screen and is the
+ * only cue a non-sighted reader would have had.
  */
 export function SiteHeader({
   wordmark,
@@ -123,18 +123,12 @@ export function SiteHeader({
                 const isActive = sectionId(link.href) === activeId
                 return (
                   <li key={link.href}>
-                    {/* The current section's key stays held down, which is how
-                        a terminal marks an active function — so the bar needs
-                        no separate indicator running alongside it. */}
                     <a
                       href={link.href}
                       onClick={() => setActiveId(sectionId(link.href))}
                       aria-current={isActive ? 'true' : undefined}
-                      style={keyStyle('sector')}
-                      className={keyClassName({
-                        tone: 'sector',
-                        className: isActive ? 'key-latched !text-key-amber' : undefined,
-                      })}
+                      style={keyStyle('nav')}
+                      className={keyClassName({ tone: 'nav' })}
                     >
                       {link.label}
                     </a>

@@ -51,9 +51,9 @@ export function Projects() {
                 Read the case study
                 <span
                   aria-hidden="true"
-                  className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1"
+                  className="mono-data inline-block transition-transform duration-300 ease-out group-hover:translate-x-1"
                 >
-                  &rarr;
+                  &gt;
                 </span>
               </span>
             </Link>

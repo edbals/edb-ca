@@ -46,7 +46,7 @@ export const credentialSections: readonly CredentialSection[] = [
       {
         role: 'Sophomore',
         organisation: ubcSauder.name,
-        descriptor: 'Finance & Business Analytics (Intended)',
+        descriptor: 'BCom, Finance Specialization & Business Technology Management',
         period: 'Expected May 2029',
         href: ubcSauder.href,
       },

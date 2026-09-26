@@ -90,6 +90,10 @@
   --color-key-amber: #f5b115;
   --color-key-amber-edge: #b87d05;
   --color-key-amber-hover: #ffc23d;
+  /* Amber dark enough to read as text on a white cap. The bright amber is a
+     screen colour; at 4.5:1 on white it fails outright, so light surfaces get
+     this instead of the phosphor. */
+  --color-key-amber-ink: #b45309;
   --color-key-linkedin: #0a66c2;
   --color-key-linkedin-edge: #004182;
   --color-key-linkedin-hover: #1275d6;
@@ -226,6 +230,20 @@
   &:active {
     transform: translateY(var(--key-travel));
     box-shadow: 0 0 0 0 var(--key-edge);
+  }
+}
+
+/* A flat key: no moulded edge and no travel. Used in the header bar, where
+   five keys each casting a hard edge made the strip read as heavier than the
+   page beneath it. Hover and latch are carried by the border and the label
+   instead, so the affordance survives losing the depth. */
+@utility key-flat {
+  --key-travel: 0px;
+  &,
+  &:hover,
+  &:active {
+    box-shadow: none;
+    transform: none;
   }
 }
 

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { externalLinkProps } from '@/lib/external-link'
 import { cn } from '@/lib/utils'
 
-export type KeyTone = 'primary' | 'secondary' | 'sector' | 'linkedin'
+export type KeyTone = 'primary' | 'secondary' | 'sector' | 'nav' | 'linkedin'
 export type KeySize = 'md' | 'sm'
 
 interface KeyStyle {
@@ -36,6 +36,14 @@ const TONES: Record<KeyTone, KeyStyle> = {
     face: 'bg-[#0f1113] text-[#e8e6e1] border border-[#2a2e35] hover:bg-[#1a1d22] hover:text-key-amber',
     edge: '#000000',
     go: 'text-key-amber',
+  },
+  /** Header navigation: a white cap with no moulded edge. Same face as the
+   *  secondary key, flattened, because five edged keys in one strip read as
+   *  heavier than the page they sit above. */
+  nav: {
+    face: 'key-flat bg-paper text-ink border border-rule-strong hover:border-ink hover:bg-paper-raised',
+    edge: 'transparent',
+    go: 'text-key-amber-ink',
   },
   /** The link out, in the network's own blue. */
   linkedin: {

@@ -68,7 +68,7 @@ export function Research() {
                 aria-hidden="true"
                 className="text-term-faint hidden opacity-0 transition-opacity group-hover:opacity-100 md:block"
               >
-                &rarr;
+                &gt;
               </span>
             </Link>
           ))}

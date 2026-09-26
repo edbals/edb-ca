@@ -138,6 +138,8 @@ export async function MarketUpdate() {
             <p className="text-ink-tertiary text-xs">
               Latest published observations, not intraday quotes, so these do not move while an
               exchange is open. Rechecked every 15 minutes.
+            </p>
+            <p className="text-ink-quaternary mt-2 text-xs">
               Sources: Bank of Canada Valet, European Central Bank via Frankfurter, U.S. Treasury
               FiscalData, CoinGecko.
             </p>

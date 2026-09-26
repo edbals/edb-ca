@@ -48,7 +48,10 @@ function Entries({ section }: { section: CredentialSection }) {
 export function Credentials() {
   return (
     <div className="shell pb-16 md:pb-21">
-      <div className="border-ink border-t-2">
+      {/* "Profile" is the terminal's own word for this page , DES gives you a
+          security's profile , and it reads as plain English besides. */}
+      <h2 className="micro text-ink-tertiary border-ink border-b pb-2.5">Profile</h2>
+      <div>
         {credentialSections.map((section) => (
           <section
             key={section.id}

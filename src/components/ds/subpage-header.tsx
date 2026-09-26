@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
 import { Tag } from '@/components/ds/tag'
 
 export interface SubpageHeaderProps {
@@ -38,12 +37,14 @@ export function SubpageHeader({
         href={backHref}
         className="group text-ink-tertiary hover:text-ink inline-flex items-center gap-2 text-body-sm transition-colors"
       >
-        <ArrowLeft
-          size={14}
-          strokeWidth={1.75}
+        {/* Angle bracket rather than a drawn arrow, matching the > that marks
+            every forward link on the site. */}
+        <span
           aria-hidden="true"
-          className="transition-transform duration-300 ease-out group-hover:-translate-x-0.5"
-        />
+          className="mono-data inline-block transition-transform duration-300 ease-out group-hover:-translate-x-0.5"
+        >
+          &lt;
+        </span>
         {backLabel}
       </Link>
 
