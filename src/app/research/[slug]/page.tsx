@@ -88,13 +88,13 @@ export default async function ResearchPage({ params }: ResearchPageProps) {
 
   if (!entry) notFound()
 
-  const hasAnalysis = Boolean(entry.purpose || entry.findings?.length)
+  const hasAnalysis = Boolean(entry.findings?.length)
 
   return (
     <main className="shell pt-11 pb-18 md:pt-14">
       <SubpageHeader
-        backLabel="Research"
-        backHref="/#research"
+        backLabel="Publications"
+        backHref="/#publications"
         category={entry.category}
         outlet={entry.outlet}
         year={entry.year}
@@ -116,15 +116,8 @@ export default async function ResearchPage({ params }: ResearchPageProps) {
               readable while the reader scrolls through the PDF rather than
               scrolling away from them. */}
           <div className="flex flex-col gap-6 lg:sticky lg:top-20 lg:self-start">
-            {entry.purpose ? (
-              <div>
-                <h2 className="micro text-ink-tertiary">Purpose</h2>
-                <p className="mt-2.5 text-[1.0625rem] leading-relaxed">{entry.purpose}</p>
-              </div>
-            ) : null}
-
             {entry.findings && entry.findings.length > 0 ? (
-              <div className="border-rule border-t pt-5">
+              <div>
                 <h2 className="micro text-ink-tertiary">Findings</h2>
                 <div className="mt-3">
                   <NumberedList items={entry.findings} divided={false} />

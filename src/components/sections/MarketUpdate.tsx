@@ -89,7 +89,7 @@ export async function MarketUpdate() {
     <section className="shell py-16 md:py-21">
       <SectionHeading
         id="markets"
-        title="Market update"
+        title="Markets"
         aside={
           <span className="text-up inline-flex items-center gap-2">
             <span aria-hidden="true" className="live-dot bg-up rounded-round block size-1.5" />

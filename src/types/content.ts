@@ -67,7 +67,9 @@ export interface ResearchEntry {
   subtitle?: string
   description?: string
   thumbnail?: string
-  /** The question the piece set out to answer. */
+  /** The question the piece set out to answer. Kept on the entries but no
+   *  longer rendered: the subpages lead with the document and the findings.
+   *  Left in place rather than deleted so the written text isn't lost. */
   purpose?: string
   /** Conclusions reached, not a summary of the document. */
   findings?: readonly string[]

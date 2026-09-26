@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { externalLinkProps } from '@/lib/external-link'
 import { cn } from '@/lib/utils'
 
-export type KeyTone = 'primary' | 'secondary'
+export type KeyTone = 'primary' | 'secondary' | 'sector' | 'linkedin'
 export type KeySize = 'md' | 'sm'
 
 interface KeyStyle {
@@ -28,6 +28,21 @@ const TONES: Record<KeyTone, KeyStyle> = {
     face: 'bg-paper text-ink border border-rule-strong hover:border-ink hover:bg-paper-raised',
     edge: 'var(--color-rule-strong)',
     go: 'text-accent',
+  },
+  /** Section keys. Amber type on a black cap , the modern Terminal screen
+   *  rather than the 1980s keyboard. Keeping the cap black means the whole
+   *  bar is one family and the label colour carries the meaning, instead of
+   *  three saturated amber blocks fighting the headline beneath them. */
+  sector: {
+    face: 'bg-ink text-key-amber hover:bg-[#23262c]',
+    edge: '#000000',
+    go: 'text-key-amber',
+  },
+  /** The link out, in the network's own blue. */
+  linkedin: {
+    face: 'bg-key-linkedin text-white hover:bg-key-linkedin-hover',
+    edge: 'var(--color-key-linkedin-edge)',
+    go: 'text-white',
   },
 }
 

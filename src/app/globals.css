@@ -83,6 +83,17 @@
   --color-up: #0f7a45;
   --color-down: #c4362b;
 
+  /* Key caps. The terminal keyboard colour-codes its keys by function, and
+     these are that mapping: amber for the sector keys that jump you somewhere,
+     the network's own blue for the link out to it. Amber takes ink text, the
+     way the real caps do; blue takes white. */
+  --color-key-amber: #f5b115;
+  --color-key-amber-edge: #b87d05;
+  --color-key-amber-hover: #ffc23d;
+  --color-key-linkedin: #0a66c2;
+  --color-key-linkedin-edge: #004182;
+  --color-key-linkedin-hover: #1275d6;
+
   /* Terminal. Scoped to the command line and the ticker. */
   --color-term: #111417;
   --color-term-raised: #1a1e22;
@@ -213,6 +224,20 @@
 
   /* Bottoms out: the cap meets the board and the edge disappears. */
   &:active {
+    transform: translateY(var(--key-travel));
+    box-shadow: 0 0 0 0 var(--key-edge);
+  }
+}
+
+/* The current section's key stays pressed. A latched key is exactly how a
+   terminal shows which function is active, and it means the nav needs no
+   separate indicator , the key itself is the state.
+
+   `&:hover` is restated so the latch survives the pointer passing over it;
+   without it `.key:hover` would out-specify this and pop the key back up. */
+@utility key-latched {
+  &,
+  &:hover {
     transform: translateY(var(--key-travel));
     box-shadow: 0 0 0 0 var(--key-edge);
   }

@@ -31,9 +31,12 @@ function sectionId(href: string): string {
 }
 
 /**
- * A slim sticky bar: wordmark, sections, résumé. The current section is marked
- * by a soft accent fill rather than a moving indicator , the sections are
- * destinations on one page, and a tinted label says that without animating.
+ * A sticky key bar: wordmark, section keys, LinkedIn, résumé. Every control is
+ * the same key, distinguished by label colour rather than by shape.
+ *
+ * The current section's key stays latched (held down), which is how a terminal
+ * marks an active function , so the bar needs no separate indicator sliding
+ * around behind the labels.
  */
 export function SiteHeader({
   wordmark,
@@ -106,7 +109,7 @@ export function SiteHeader({
   return (
     <>
       <header className="border-rule bg-paper/92 sticky top-0 z-50 border-b backdrop-blur-md">
-        <div className="shell flex items-center gap-1.5 py-3">
+        <div className="shell flex items-center gap-2 py-2.5">
           <a
             href={wordmarkHref}
             className="font-serif mr-5 shrink-0 text-[1.3rem] tracking-[-0.02em] whitespace-nowrap transition-opacity hover:opacity-70"
@@ -115,21 +118,23 @@ export function SiteHeader({
           </a>
 
           <nav aria-label="Sections" className="hidden md:block">
-            <ul className="flex gap-1">
+            <ul className="flex gap-1.5">
               {links.map((link) => {
                 const isActive = sectionId(link.href) === activeId
                 return (
                   <li key={link.href}>
+                    {/* The current section's key stays held down, which is how
+                        a terminal marks an active function — so the bar needs
+                        no separate indicator running alongside it. */}
                     <a
                       href={link.href}
                       onClick={() => setActiveId(sectionId(link.href))}
                       aria-current={isActive ? 'true' : undefined}
-                      className={cn(
-                        'micro rounded-button block px-2.5 py-1.5 transition-colors',
-                        isActive
-                          ? 'bg-accent-soft text-accent'
-                          : 'text-ink-secondary hover:bg-wash hover:text-ink',
-                      )}
+                      style={keyStyle('sector')}
+                      className={keyClassName({
+                        tone: 'sector',
+                        className: isActive ? 'key-latched' : undefined,
+                      })}
                     >
                       {link.label}
                     </a>
@@ -141,20 +146,23 @@ export function SiteHeader({
 
           <div className="ml-auto flex items-center gap-3.5">
             {secondaryLinks.map((link) => (
-              <a
+              <ButtonLink
                 key={link.href}
                 href={link.href}
-                {...externalLinkProps(link.external)}
-                className="micro mono-data link-rule text-ink-secondary hidden md:inline-block"
+                external={link.external}
+                tone="linkedin"
+                className="hidden md:inline-flex"
               >
                 {link.label}
-              </a>
+              </ButtonLink>
             ))}
+            {/* Identical to the hero key, <GO> included: it is the same
+                action, so it is the same object. */}
             {cta ? (
               <ButtonLink
                 href={cta.href}
                 external={cta.external}
-                size="sm"
+                command
                 className="hidden md:inline-flex"
               >
                 {cta.label}
@@ -165,7 +173,7 @@ export function SiteHeader({
               onClick={() => setIsOpen(true)}
               aria-expanded={isOpen}
               style={keyStyle('secondary')}
-              className={keyClassName({ tone: 'secondary', size: 'sm', className: 'md:hidden' })}
+              className={keyClassName({ tone: 'secondary', className: 'md:hidden' })}
             >
               Menu
             </button>

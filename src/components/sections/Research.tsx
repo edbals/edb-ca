@@ -33,10 +33,10 @@ export function Research() {
       {/* No count or year range here: the listing below prints a year on
           every row, so a summary above it only restates what the reader is
           about to read. */}
-      <SectionHeading id="research" title="Research" />
+      <SectionHeading id="publications" title="Publications" />
 
-      <Terminal path="~/research" className="mt-8">
-        <TerminalCommand command="ls research/ --sort=date" />
+      <Terminal path="~/publications" className="mt-8">
+        <TerminalCommand command="ls publications/ --sort=date" />
 
         <div className="mt-3.5">
           {/* The header labels the columns, so it only makes sense where

@@ -1,9 +1,8 @@
 import { cvLink } from '@/content/cv'
 import { contact } from '@/content/contact'
-import { acresResearch, ubcSauder } from '@/content/hero'
+import { exploring } from '@/content/exploring'
 import { ButtonLink, keyClassName, keyStyle } from '@/components/ds/button'
 import { EmailMenu } from '@/components/ds/email-menu'
-import { RoleRow } from '@/components/ds/role-row'
 
 /** Key terms, lifted in the accent so the sentence reads by its nouns alone. */
 function Key({ children }: { children: React.ReactNode }) {
@@ -17,16 +16,15 @@ function Key({ children }: { children: React.ReactNode }) {
  */
 export function Hero() {
   return (
-    <section id="top" className="shell pt-18 pb-16 md:pt-26 md:pb-22">
+    <section id="top" className="shell pt-18 pb-14 md:pt-26 md:pb-18">
       <p className="text-lead max-w-[30ch] font-semibold">
         I&apos;m interested in <Key>finance</Key>, <Key>technology</Key>, and{' '}
-        <Key>product design</Key>, and I enjoy exploring how technology can change the way we
-        understand businesses and markets.
+        <Key>product design</Key>.
       </p>
 
       <p className="text-ink-secondary mt-5 max-w-[46ch] text-[1.0625rem] leading-relaxed">
-        I like turning ideas into something tangible, from developing an investment thesis to
-        building tools around problems I find interesting.
+        I love analysing emerging businesses, macro trends, and understanding the different ways
+        technology can change economies and society.
       </p>
 
       <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -38,32 +36,31 @@ export function Hero() {
           triggerStyle={keyStyle('secondary')}
           triggerClassName={keyClassName({ tone: 'secondary' })}
         />
-        <a
-          href={contact.linkedinUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="micro mono-data link-rule text-ink-secondary"
-        >
+        <ButtonLink href={contact.linkedinUrl} external tone="linkedin">
           {contact.linkedinLabel}
-        </a>
+        </ButtonLink>
       </div>
 
-      {/* Roles, titles and dates mirror the résumé PDF exactly, so the two
-          never contradict each other in front of a recruiter. */}
-      <div className="border-rule mt-14 border-t">
-        <RoleRow
-          role="Sophomore"
-          organisation={ubcSauder.name}
-          href={ubcSauder.href}
-          descriptor="Finance & Business Analytics (Intended)"
-          period="Expected May 2029"
-        />
-        <RoleRow
-          role="Director of Research II"
-          organisation={acresResearch.name}
-          href={acresResearch.href}
-          period="June 2024 - Present"
-        />
+      {/* What's live right now, as opposed to the record below it. The marker
+          is the terminal prompt rather than a bullet, which ties this to the
+          publications listing without turning it into another dark panel. */}
+      <div className="mt-14">
+        <h2 className="micro text-ink-tertiary border-ink border-b pb-2.5">
+          Currently exploring
+        </h2>
+        <ul className="flex flex-col">
+          {exploring.map((topic) => (
+            <li
+              key={topic}
+              className="border-rule flex gap-3 border-b py-3.5 text-[1.0625rem] leading-snug"
+            >
+              <span aria-hidden="true" className="mono-data text-accent pt-[0.2em] text-xs">
+                &gt;
+              </span>
+              {topic}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )
