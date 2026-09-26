@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 export interface EmailMenuProps {
   email: string
   /** The visible trigger, e.g. "Email" or the address itself. */
-  label?: string
+  label?: React.ReactNode
   /** Styling for the trigger, so the menu can sit in prose or on a button. */
   triggerClassName?: string
   /** Inline style for the trigger, so a key tone can pass its edge colour. */

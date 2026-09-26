@@ -1,7 +1,7 @@
 import { cvLink } from '@/content/cv'
 import { contact } from '@/content/contact'
 import { exploring } from '@/content/exploring'
-import { ButtonLink, keyClassName, keyStyle } from '@/components/ds/button'
+import { ButtonLink, KeyGo, keyClassName, keyStyle } from '@/components/ds/button'
 import { EmailMenu } from '@/components/ds/email-menu'
 
 /** Key terms, lifted in the accent so the sentence reads by its nouns alone. */
@@ -33,6 +33,12 @@ export function Hero() {
         </ButtonLink>
         <EmailMenu
           email={contact.email}
+          label={
+            <>
+              Email
+              <KeyGo tone="secondary" />
+            </>
+          }
           triggerStyle={keyStyle('secondary')}
           triggerClassName={keyClassName({ tone: 'secondary' })}
         />

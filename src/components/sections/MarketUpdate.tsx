@@ -1,4 +1,5 @@
 import { getMarketSnapshot } from '@/lib/market/snapshot'
+import { marketStatus, type StatusTone } from '@/lib/market/status'
 import type { MarketGroup, MarketQuote } from '@/lib/market/types'
 import { SectionHeading } from '@/components/ds/section-heading'
 import { cn } from '@/lib/utils'
@@ -82,8 +83,15 @@ function Group({ group }: { group: MarketGroup }) {
  * never waits on four third-party APIs and the APIs never see per-visitor
  * traffic. A source that fails is named rather than hidden.
  */
+const STATUS_TONE: Record<StatusTone, { dot: string; text: string }> = {
+  fresh: { dot: 'bg-up', text: 'text-up' },
+  closed: { dot: 'bg-ink-quaternary', text: 'text-ink-tertiary' },
+  stale: { dot: 'bg-ink-quaternary', text: 'text-ink-tertiary' },
+}
+
 export async function MarketUpdate() {
   const snapshot = await getMarketSnapshot()
+  const status = marketStatus(snapshot)
 
   return (
     <section className="shell py-16 md:py-21">
@@ -91,9 +99,18 @@ export async function MarketUpdate() {
         id="markets"
         title="Markets"
         aside={
-          <span className="text-up inline-flex items-center gap-2">
-            <span aria-hidden="true" className="live-dot bg-up rounded-round block size-1.5" />
-            Live
+          <span className={cn('inline-flex items-center gap-2', STATUS_TONE[status.tone].text)}>
+            <span
+              aria-hidden="true"
+              className={cn(
+                'rounded-round block size-1.5',
+                STATUS_TONE[status.tone].dot,
+                // Only a genuinely current panel pulses. A blinking dot over
+                // two-day-old weekend figures is the exact thing this replaced.
+                status.tone === 'fresh' && 'live-dot',
+              )}
+            />
+            {status.label}
           </span>
         }
       />
@@ -119,7 +136,8 @@ export async function MarketUpdate() {
 
           <div className="border-rule bg-paper-raised mt-4.5 border-t px-4.5 py-3.5">
             <p className="text-ink-tertiary text-xs">
-              Latest published observations, not intraday quotes. Refreshed every 15 minutes.
+              Latest published observations, not intraday quotes, so these do not move while an
+              exchange is open. Rechecked every 15 minutes.
               Sources: Bank of Canada Valet, European Central Bank via Frankfurter, U.S. Treasury
               FiscalData, CoinGecko.
             </p>

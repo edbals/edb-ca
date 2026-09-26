@@ -29,12 +29,11 @@ const TONES: Record<KeyTone, KeyStyle> = {
     edge: 'var(--color-rule-strong)',
     go: 'text-accent',
   },
-  /** Section keys. Amber type on a black cap , the modern Terminal screen
-   *  rather than the 1980s keyboard. Keeping the cap black means the whole
-   *  bar is one family and the label colour carries the meaning, instead of
-   *  three saturated amber blocks fighting the headline beneath them. */
+  /** Section keys, unlit until touched: a near-black cap with bone type that
+   *  lights amber under the pointer. The latched key stays lit, so the section
+   *  you are in is the one glowing rather than merely the one held down. */
   sector: {
-    face: 'bg-ink text-key-amber hover:bg-[#23262c]',
+    face: 'bg-[#0f1113] text-[#e8e6e1] border border-[#2a2e35] hover:bg-[#1a1d22] hover:text-key-amber',
     edge: '#000000',
     go: 'text-key-amber',
   },
@@ -47,6 +46,19 @@ const TONES: Record<KeyTone, KeyStyle> = {
 }
 
 const SIZES: Record<KeySize, string> = { md: '', sm: 'key-sm' }
+
+/**
+ * The command tag. Split out so a key that isn't a `ButtonLink` — the email
+ * menu's trigger is a real button — renders the identical mark rather than
+ * an approximation of it.
+ */
+export function KeyGo({ tone = 'primary' }: { tone?: KeyTone }) {
+  return (
+    <span aria-hidden="true" className={cn('key-go', TONES[tone].go)}>
+      &lt;GO&gt;
+    </span>
+  )
+}
 
 export interface ButtonLinkProps {
   href: string
@@ -88,11 +100,7 @@ export function ButtonLink({
       className={cn('key', SIZES[size], style.face, className)}
     >
       {children}
-      {command ? (
-        <span aria-hidden="true" className={cn('key-go', style.go)}>
-          &lt;GO&gt;
-        </span>
-      ) : null}
+      {command ? <KeyGo tone={tone} /> : null}
     </a>
   )
 }

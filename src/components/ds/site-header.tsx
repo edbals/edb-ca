@@ -133,7 +133,7 @@ export function SiteHeader({
                       style={keyStyle('sector')}
                       className={keyClassName({
                         tone: 'sector',
-                        className: isActive ? 'key-latched' : undefined,
+                        className: isActive ? 'key-latched !text-key-amber' : undefined,
                       })}
                     >
                       {link.label}
