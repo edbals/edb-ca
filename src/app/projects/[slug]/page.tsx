@@ -44,7 +44,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {project.liveUrl ? (
         <Reveal delay={40} className="mt-7 flex flex-wrap items-center gap-3">
-          <ButtonLink href={project.liveUrl} external>
+          <ButtonLink href={project.liveUrl} external command>
             <Globe size={14} strokeWidth={1.75} aria-hidden="true" />
             Visit the live site
           </ButtonLink>

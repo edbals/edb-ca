@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
-import { ButtonLink } from '@/components/ds/button'
+import { ButtonLink, keyClassName, keyStyle } from '@/components/ds/button'
 import { externalLinkProps } from '@/lib/external-link'
 import { cn } from '@/lib/utils'
 
@@ -145,7 +145,7 @@ export function SiteHeader({
                 key={link.href}
                 href={link.href}
                 {...externalLinkProps(link.external)}
-                className="micro link-rule text-ink-secondary hidden md:inline-block"
+                className="micro mono-data link-rule text-ink-secondary hidden md:inline-block"
               >
                 {link.label}
               </a>
@@ -154,6 +154,7 @@ export function SiteHeader({
               <ButtonLink
                 href={cta.href}
                 external={cta.external}
+                size="sm"
                 className="hidden md:inline-flex"
               >
                 {cta.label}
@@ -163,7 +164,8 @@ export function SiteHeader({
               type="button"
               onClick={() => setIsOpen(true)}
               aria-expanded={isOpen}
-              className="micro rounded-button border-rule-strong text-ink hover:border-ink border px-3 py-1.5 transition-colors md:hidden"
+              style={keyStyle('secondary')}
+              className={keyClassName({ tone: 'secondary', size: 'sm', className: 'md:hidden' })}
             >
               Menu
             </button>
@@ -212,11 +214,7 @@ export function SiteHeader({
           </ul>
 
           {cta ? (
-            <ButtonLink
-              href={cta.href}
-              external={cta.external}
-              className="mt-8 w-fit px-5 py-3"
-            >
+            <ButtonLink href={cta.href} external={cta.external} command className="mt-8 w-fit">
               {cta.label}
             </ButtonLink>
           ) : null}

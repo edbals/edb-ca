@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { ArrowUpRight } from 'lucide-react'
 import type { ResearchSource } from '@/types/content'
 import { researchEntries } from '@/content/research'
 import { socialEmbedUrl } from '@/lib/social-embed'
-import { EXTERNAL_LINK_PROPS } from '@/lib/external-link'
 import { Reveal } from '@/components/ds/reveal'
 import { SubpageHeader } from '@/components/ds/subpage-header'
+import { ButtonLink } from '@/components/ds/button'
 import { PdfViewer } from '@/components/ds/pdf-viewer'
 import { NumberedList } from '@/components/ds/numbered-list'
 
@@ -44,14 +43,9 @@ function SocialDocument({
     <div className="border-rule rounded-panel overflow-hidden border">
       <div className="border-rule bg-paper-raised flex flex-wrap items-center gap-2.5 border-b px-3.5 py-2.5">
         <span className="micro text-ink-tertiary">Published on {source.network}</span>
-        <a
-          href={source.href}
-          {...EXTERNAL_LINK_PROPS}
-          className="micro rounded-button border-rule-strong text-ink hover:border-ink ml-auto inline-flex items-center gap-1.5 border px-2.5 py-1 transition-colors"
-        >
+        <ButtonLink href={source.href} external tone="secondary" size="sm" className="ml-auto">
           Open
-          <ArrowUpRight size={12} strokeWidth={2} aria-hidden="true" />
-        </a>
+        </ButtonLink>
       </div>
 
       <div className="bg-wash grid place-items-center p-4 md:p-6">

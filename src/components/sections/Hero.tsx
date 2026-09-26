@@ -1,7 +1,7 @@
 import { cvLink } from '@/content/cv'
 import { contact } from '@/content/contact'
 import { acresResearch, ubcSauder } from '@/content/hero'
-import { ButtonLink } from '@/components/ds/button'
+import { ButtonLink, keyClassName, keyStyle } from '@/components/ds/button'
 import { EmailMenu } from '@/components/ds/email-menu'
 import { RoleRow } from '@/components/ds/role-row'
 
@@ -30,18 +30,19 @@ export function Hero() {
       </p>
 
       <div className="mt-8 flex flex-wrap items-center gap-3">
-        <ButtonLink href={cvLink.href} external={cvLink.external}>
+        <ButtonLink href={cvLink.href} external={cvLink.external} command>
           {cvLink.label}
         </ButtonLink>
         <EmailMenu
           email={contact.email}
-          triggerClassName="micro rounded-button border border-rule-strong text-ink hover:border-ink inline-flex cursor-pointer items-center gap-2 px-4 py-2 transition-colors"
+          triggerStyle={keyStyle('secondary')}
+          triggerClassName={keyClassName({ tone: 'secondary' })}
         />
         <a
           href={contact.linkedinUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="micro link-rule text-ink-secondary"
+          className="micro mono-data link-rule text-ink-secondary"
         >
           {contact.linkedinLabel}
         </a>

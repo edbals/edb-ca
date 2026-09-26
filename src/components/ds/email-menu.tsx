@@ -12,6 +12,8 @@ export interface EmailMenuProps {
   label?: string
   /** Styling for the trigger, so the menu can sit in prose or on a button. */
   triggerClassName?: string
+  /** Inline style for the trigger, so a key tone can pass its edge colour. */
+  triggerStyle?: React.CSSProperties
   /** Which way the list unfolds. "top" for triggers near the page bottom. */
   placement?: 'bottom' | 'top'
   className?: string
@@ -29,6 +31,7 @@ export function EmailMenu({
   email,
   label = 'Email',
   triggerClassName,
+  triggerStyle,
   placement = 'bottom',
   className,
 }: EmailMenuProps) {
@@ -101,6 +104,7 @@ export function EmailMenu({
         aria-expanded={isOpen}
         aria-haspopup="menu"
         aria-controls={isOpen ? menuId : undefined}
+        style={triggerStyle}
         className={triggerClassName}
       >
         {label}

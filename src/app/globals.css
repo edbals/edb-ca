@@ -169,6 +169,70 @@
   }
 }
 
+/* ------------------------------------------------------------
+   KEYS
+   Buttons are modelled on Bloomberg terminal keys: chunky mono caps
+   on a key that physically depresses. The whole effect is one hard
+   edge underneath the cap , no blur, no gradient , which is what
+   makes it read as moulded plastic rather than a floating card.
+
+   `--key-edge` is the moulding colour and is the only thing a tone
+   has to set, so a new tone cannot get the physics subtly wrong.
+   ------------------------------------------------------------ */
+@utility key {
+  --key-edge: var(--color-rule-strong);
+  --key-travel: 3px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.6875rem 0.875rem;
+  border-radius: 3px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 var(--key-travel) 0 0 var(--key-edge);
+  transition:
+    transform 90ms var(--ease-standard),
+    box-shadow 90ms var(--ease-standard),
+    background-color 160ms var(--ease-standard),
+    border-color 160ms var(--ease-standard);
+
+  /* Hover takes up a third of the travel; the press takes the rest, so
+     the click still has somewhere to go. */
+  &:hover {
+    transform: translateY(1px);
+    box-shadow: 0 calc(var(--key-travel) - 1px) 0 0 var(--key-edge);
+  }
+
+  /* Bottoms out: the cap meets the board and the edge disappears. */
+  &:active {
+    transform: translateY(var(--key-travel));
+    box-shadow: 0 0 0 0 var(--key-edge);
+  }
+}
+
+/* A smaller key, for the header bar and panel toolbars. */
+@utility key-sm {
+  --key-travel: 2px;
+  padding: 0.4375rem 0.6875rem;
+  font-size: 0.625rem;
+}
+
+/* The command tag. On a real terminal <GO> executes the line, so it is
+   only ever appended to an action that actually goes somewhere. */
+@utility key-go {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  opacity: 0.9;
+}
+
 /* Underline-on-hover link, for secondary text links. */
 @utility link-rule {
   color: inherit;
@@ -268,5 +332,11 @@
 
   .caret {
     animation: none;
+  }
+
+  /* The key still responds, it just stops moving: the cap dims instead of
+     travelling, so the press is still legible without animating position. */
+  .key {
+    --key-travel: 0px;
   }
 }

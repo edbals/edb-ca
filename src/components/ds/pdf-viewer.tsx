@@ -1,6 +1,5 @@
-import { ArrowUpRight } from 'lucide-react'
 import { getPdfMeta } from '@/lib/pdf-meta'
-import { EXTERNAL_LINK_PROPS } from '@/lib/external-link'
+import { ButtonLink } from '@/components/ds/button'
 
 export interface PdfViewerProps {
   href: string
@@ -19,6 +18,15 @@ export interface PdfViewerProps {
  * so the document is tall enough to actually read without pushing the analysis
  * beside it off the screen.
  */
+/**
+ * PDF open parameters. The built-in viewers default to showing the page
+ * thumbnail sidebar, which in a half-width column leaves the document itself
+ * too narrow to read. `navpanes=0` collapses it and `view=FitH` fits the page
+ * to the available width. Ignored by viewers that don't support them, so it
+ * degrades to the default rather than breaking.
+ */
+const VIEWER_PARAMS = '#view=FitH&navpanes=0&toolbar=1'
+
 export async function PdfViewer({ href, title }: PdfViewerProps) {
   const { fileName, size } = await getPdfMeta(href)
 
@@ -32,19 +40,14 @@ export async function PdfViewer({ href, title }: PdfViewerProps) {
             {size}
           </span>
         ) : null}
-        <a
-          href={href}
-          {...EXTERNAL_LINK_PROPS}
-          className="micro rounded-button border-rule-strong text-ink hover:border-ink inline-flex items-center gap-1.5 border px-2.5 py-1 transition-colors"
-        >
+        <ButtonLink href={href} external tone="secondary" size="sm">
           Open
-          <ArrowUpRight size={12} strokeWidth={2} aria-hidden="true" />
-        </a>
+        </ButtonLink>
       </div>
 
       <div className="bg-wash">
         <object
-          data={href}
+          data={`${href}${VIEWER_PARAMS}`}
           type="application/pdf"
           aria-label={title}
           className="block h-[70vh] max-h-[44rem] min-h-[26rem] w-full"
@@ -55,14 +58,9 @@ export async function PdfViewer({ href, title }: PdfViewerProps) {
               <p className="text-ink-secondary text-body">
                 Your browser can&apos;t display this PDF inline.
               </p>
-              <a
-                href={href}
-                {...EXTERNAL_LINK_PROPS}
-                className="micro rounded-button bg-ink text-ink-inverse hover:bg-accent mt-4 inline-flex items-center gap-2 px-4 py-2.5 transition-colors"
-              >
+              <ButtonLink href={href} external command className="mt-4">
                 Open the PDF
-                <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
-              </a>
+              </ButtonLink>
             </div>
           </div>
         </object>
