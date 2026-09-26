@@ -1,5 +1,8 @@
-Square company logos for the hero chips.
+# Logos
 
-Drop `investor-muda.png` and `acres-research.png` here (square, transparent
-background preferred), then set the matching `logo` field in
-`src/content/hero.ts`. Until then the chips render a monogram.
+Currently unused. The roles list on the home page renders organisation names
+as text rather than logo tiles — three marks at three different aspect ratios
+were the densest, least readable part of that section.
+
+The files are kept here so a future layout can pick them up without having to
+source them again.
