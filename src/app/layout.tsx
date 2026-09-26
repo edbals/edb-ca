@@ -10,9 +10,15 @@ import { cvLink } from '@/content/cv'
 import { getMarketSnapshot } from '@/lib/market/snapshot'
 import './globals.css'
 
-const SITE_URL = 'https://edbert.ca'
+/**
+ * The apex 308s to www, so www is the canonical host. Using it here matters
+ * beyond tidiness: metadataBase builds the og:image URL, and at the apex that
+ * URL redirects — which some link scrapers will not follow, leaving the share
+ * card with no image at all.
+ */
+const SITE_URL = 'https://www.edbert.ca'
 const SITE_DESCRIPTION =
-  'Ed Sunarpo. Fascinated by the intersection of finance, technology, and product design. Equity research, market analysis, and AI powered tools.'
+  'Ed Sunarpo. I\'m interested in finance, technology, and product design. Equity research, macro notes, and tools for understanding markets.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
