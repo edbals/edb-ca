@@ -20,7 +20,7 @@ export function TerminalCommand({
 }) {
   return (
     <p className={cn('text-term-dim whitespace-nowrap', className)}>
-      <span aria-hidden="true" className="text-term-faint select-none">
+      <span aria-hidden="true" className="text-term-dim select-none">
         ${' '}
       </span>
       <span className="text-term-fg">{command}</span>
@@ -31,7 +31,7 @@ export function TerminalCommand({
 /** The trailing prompt with a blinking caret, as a live shell would sit. */
 export function TerminalPrompt({ className }: { className?: string }) {
   return (
-    <p className={cn('text-term-faint', className)} aria-hidden="true">
+    <p className={cn('text-term-dim', className)} aria-hidden="true">
       $ <span className="caret align-[-0.16em]" />
     </p>
   )

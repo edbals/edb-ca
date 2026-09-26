@@ -34,7 +34,7 @@ function Run({ items, ariaHidden }: { items: readonly TickerItem[]; ariaHidden?:
           key={item.key}
           className="mono-data border-crt-rule flex shrink-0 items-baseline gap-1.5 border-r px-4 py-2 text-[0.6875rem] whitespace-nowrap"
         >
-          <span className="text-term-faint uppercase">{item.label}</span>
+          <span className="text-term-label uppercase">{item.label}</span>
           {/* The figure carries a faint bloom, the way phosphor does. It is
               the only thing on the strip that has to be readable at speed. */}
           <span className="text-term-fg [text-shadow:0_0_7px_rgb(123_219_163/0.45)]">
@@ -45,7 +45,7 @@ function Run({ items, ariaHidden }: { items: readonly TickerItem[]; ariaHidden?:
               className={cn(
                 item.direction === 'up' && 'text-term-fg',
                 item.direction === 'down' && 'text-term-down',
-                item.direction === 'flat' && 'text-term-faint',
+                item.direction === 'flat' && 'text-term-label',
               )}
             >
               {ARROW[item.direction]}
@@ -84,7 +84,7 @@ export function TickerTape({ snapshot }: { snapshot: MarketSnapshot }) {
           aria-hidden="true"
           className="live-dot rounded-round bg-term-fg block size-1.5 shadow-[0_0_6px_rgb(123_219_163/0.8)]"
         />
-        <span className="micro text-term-dim hidden sm:block">Tape</span>
+        <span className="micro text-term-label hidden sm:block">Tape</span>
       </div>
 
       <div

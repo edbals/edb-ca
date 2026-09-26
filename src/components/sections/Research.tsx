@@ -41,7 +41,7 @@ export function Research() {
         <div className="mt-3.5">
           {/* The header labels the columns, so it only makes sense where
               there are columns. */}
-          <div className="micro text-term-faint border-term-rule hidden grid-cols-[13rem_4rem_1fr_auto] gap-4 border-b pb-2 md:grid">
+          <div className="micro text-term-label border-term-rule hidden grid-cols-[13rem_4rem_1fr_auto] gap-4 border-b pb-2 md:grid">
             <span>Category</span>
             <span>Year</span>
             <span>Title</span>
@@ -56,7 +56,7 @@ export function Research() {
             >
               {/* On a phone the category and year share one line, since
                   together they are shorter than either is beside a title. */}
-              <span className="text-term-faint flex items-baseline gap-2 md:block md:truncate">
+              <span className="text-term-label flex items-baseline gap-2 md:block md:truncate">
                 {slugifyCategory(entry.category)}
                 <span className="text-term-dim md:hidden">{entry.year}</span>
               </span>
@@ -66,7 +66,7 @@ export function Research() {
               </span>
               <span
                 aria-hidden="true"
-                className="text-term-faint hidden opacity-0 transition-opacity group-hover:opacity-100 md:block"
+                className="text-term-label hidden opacity-0 transition-opacity group-hover:opacity-100 md:block"
               >
                 &gt;
               </span>

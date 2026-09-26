@@ -17,10 +17,14 @@ function Entry({ entry }: { entry: CredentialEntry }) {
   return (
     <Wrapper
       {...(entry.href ? { href: entry.href, ...externalLinkProps(true) } : {})}
-      className={entry.href ? 'group block' : 'block'}
+      className={entry.href ? 'group/entry block' : 'block'}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <p className="text-title font-semibold group-hover:underline group-hover:underline-offset-4">
+        {/* Named group: `group-hover:` matches any .group ancestor, so while the
+            disclosure was also a plain .group, hovering anywhere in it
+            underlined every entry inside , including the ones that aren't
+            links at all. */}
+        <p className="text-title font-semibold group-hover/entry:underline group-hover/entry:underline-offset-4">
           {entry.role}
         </p>
         {/* Dates for a post, the outcome for an award , whichever one is the
@@ -70,7 +74,7 @@ function CollapsedSection({ section }: { section: CredentialSection }) {
   const count = section.entries?.length ?? 0
 
   return (
-    <details className="group border-rule border-b">
+    <details className="group/disclosure border-rule border-b">
       <summary
         className={cn(
           LEDGER,
@@ -91,7 +95,7 @@ function CollapsedSection({ section }: { section: CredentialSection }) {
           </span>
           <span
             aria-hidden="true"
-            className="mono-data text-ink-quaternary transition-transform duration-200 group-open:rotate-90"
+            className="mono-data text-ink-quaternary transition-transform duration-200 group-open/disclosure:rotate-90"
           >
             &gt;
           </span>

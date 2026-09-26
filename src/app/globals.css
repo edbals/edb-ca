@@ -105,7 +105,12 @@
   --color-term-rule: #272c31;
   --color-term-fg: #7bdba3;
   --color-term-dim: #5d8f74;
-  --color-term-faint: #465a4f;
+  /* Labels and chrome on the terminal ground. The palette used to carry a
+     fainter step (#465a4f) which measured 2.5:1 , unreadable at 11px, and the
+     reason the tape's tickers and the publications listing's category column
+     could not be made out at all. Both of these clear 4.5:1 while staying
+     well below the phosphor, so a figure is still what the eye lands on. */
+  --color-term-label: #8fa89b;
   --color-term-down: #e88b7a;
 
   /* ---------- Motion ---------- */
