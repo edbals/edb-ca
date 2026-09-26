@@ -356,6 +356,84 @@
 }
 
 /* ------------------------------------------------------------
+   KEYWORD CYCLE
+   The three nouns in the opening line light in turn, each with a rule
+   sweeping in beneath it, then all three settle lit.
+
+   Two deliberate constraints:
+
+   - It runs a fixed number of passes and stops. A permanent loop at the
+     top of the page competes with reading everything below it, and this
+     is the first thing a reader meets.
+   - It settles into the design the page already had , all three nouns in
+     the accent , so the animation is a flourish on the way to the resting
+     state rather than a state of its own. Nothing is only visible mid-
+     animation.
+
+   Pure CSS, so the hero stays a server component: making it a client
+   component to run a timer would cost more than the effect is worth.
+   ------------------------------------------------------------ */
+@keyframes kw-light {
+  0%,
+  30% {
+    color: var(--color-accent);
+  }
+  34%,
+  100% {
+    color: var(--color-ink);
+  }
+}
+
+@keyframes kw-sweep {
+  0% {
+    transform: scaleX(0);
+  }
+  12%,
+  30% {
+    transform: scaleX(1);
+  }
+  34%,
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes kw-settle {
+  to {
+    color: var(--color-accent);
+  }
+}
+
+.kw-cycle {
+  /* One slot per noun; the cycle is three slots and it runs twice. */
+  --kw-slot: 1.1s;
+  --kw-cycle: calc(var(--kw-slot) * 3);
+  --kw-passes: 2;
+  --kw-total: calc(var(--kw-cycle) * var(--kw-passes));
+
+  position: relative;
+  display: inline-block;
+  color: var(--color-ink);
+  font-weight: 600;
+  animation:
+    kw-light var(--kw-cycle) var(--ease-standard) calc(var(--kw-index) * var(--kw-slot))
+      var(--kw-passes) forwards,
+    kw-settle 0.45s var(--ease-standard) var(--kw-total) forwards;
+}
+
+.kw-cycle::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 -2px 0;
+  height: 2px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: kw-sweep var(--kw-cycle) var(--ease-standard)
+    calc(var(--kw-index) * var(--kw-slot)) var(--kw-passes) forwards;
+}
+
+/* ------------------------------------------------------------
    MOTION
    ------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
@@ -380,6 +458,19 @@
 
   .caret {
     animation: none;
+  }
+
+  /* The nouns go straight to their resting state. The cycle is decoration;
+     the accent on all three is the design, so with motion off the reader
+     gets the finished thing rather than plain text. */
+  .kw-cycle {
+    animation: none;
+    color: var(--color-accent);
+  }
+
+  .kw-cycle::after {
+    animation: none;
+    transform: scaleX(0);
   }
 
   /* The key still responds, it just stops moving: the cap dims instead of

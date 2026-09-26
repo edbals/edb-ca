@@ -4,9 +4,19 @@ import { exploring } from '@/content/exploring'
 import { ButtonLink, KeyGo, keyClassName, keyStyle } from '@/components/ds/button'
 import { EmailMenu } from '@/components/ds/email-menu'
 
-/** Key terms, lifted in the accent so the sentence reads by its nouns alone. */
-function Key({ children }: { children: React.ReactNode }) {
-  return <b className="text-accent font-semibold">{children}</b>
+/**
+ * The three nouns the sentence is really about. Each lights in turn with a
+ * rule sweeping in beneath it, then all three settle in the accent.
+ *
+ * `index` only sets the stagger; the timing lives in globals.css so the
+ * sequence can be retuned in one place.
+ */
+function Key({ index, children }: { index: number; children: React.ReactNode }) {
+  return (
+    <b className="kw-cycle" style={{ ['--kw-index' as string]: index }}>
+      {children}
+    </b>
+  )
 }
 
 /**
@@ -18,8 +28,8 @@ export function Hero() {
   return (
     <section id="top" className="shell pt-18 pb-14 md:pt-26 md:pb-18">
       <p className="text-lead max-w-[30ch] font-semibold">
-        I&apos;m interested in <Key>finance</Key>, <Key>technology</Key>, and{' '}
-        <Key>product design</Key>.
+        I&apos;m interested in <Key index={0}>finance</Key>, <Key index={1}>technology</Key>, and{' '}
+        <Key index={2}>product design</Key>.
       </p>
 
       <p className="text-ink-secondary mt-5 max-w-[46ch] text-[1.0625rem] leading-relaxed">
