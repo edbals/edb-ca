@@ -2,8 +2,9 @@ import { fetchBankOfCanada } from './sources/bank-of-canada'
 import { fetchCrypto } from './sources/coingecko'
 import { fetchEcbRates } from './sources/ecb'
 import { fetchEquityIndices, isEquitiesConfigured } from './sources/equities'
+import { fetchEconomicCalendar, isCalendarConfigured } from './sources/fred-calendar'
 import { fetchTreasuryRates } from './sources/treasury'
-import type { MarketGroup, MarketSnapshot } from './types'
+import type { EconomicRelease, MarketGroup, MarketSnapshot } from './types'
 
 export { MARKET_REVALIDATE_SECONDS } from './fetch-json'
 
@@ -32,7 +33,16 @@ export async function getMarketSnapshot(): Promise<MarketSnapshot> {
   // Equities lead when configured: an index level is the figure a reader
   // looks for first, and burying it under CORRA would be a strange order.
   const sources = [...optional, ...SOURCES]
-  const settled = await Promise.allSettled(sources.map((source) => source.load()))
+
+  // The calendar is fetched alongside the panels rather than after them, and
+  // its failure is recorded like any other source: a missing calendar must not
+  // cost the reader the figures.
+  const [settled, calendarResult] = await Promise.all([
+    Promise.allSettled(sources.map((source) => source.load())),
+    isCalendarConfigured()
+      ? Promise.allSettled([fetchEconomicCalendar()])
+      : Promise.resolve([] as PromiseSettledResult<readonly EconomicRelease[]>[]),
+  ])
 
   const groups: MarketGroup[] = []
   const failures: string[] = []
@@ -49,9 +59,20 @@ export async function getMarketSnapshot(): Promise<MarketSnapshot> {
     console.error(`[market] ${name} failed:`, result.reason)
   })
 
+  let calendar: readonly EconomicRelease[] = []
+  const calendarSettled = calendarResult[0]
+
+  if (calendarSettled?.status === 'fulfilled') {
+    calendar = calendarSettled.value
+  } else if (calendarSettled?.status === 'rejected') {
+    failures.push('FRED')
+    console.error('[market] FRED calendar failed:', calendarSettled.reason)
+  }
+
   return {
     groups,
     failures,
+    calendar,
     fetchedAt: new Date().toISOString(),
     isEquitiesPending: !isEquitiesConfigured(),
   }

@@ -45,4 +45,14 @@ export interface MarketSnapshot {
   /** True when the optional equities key is unset, so the panel can say that
    *  indices are available rather than silently omitting them. */
   isEquitiesPending: boolean
+  /** The next few US data releases. Empty when FRED_API_KEY is unset. */
+  calendar: readonly EconomicRelease[]
+}
+
+/** One upcoming data release on the economic calendar. */
+export interface EconomicRelease {
+  id: string
+  /** ISO date, e.g. "2026-10-14". */
+  date: string
+  name: string
 }

@@ -1,20 +1,17 @@
 import { acresResearch, ubcSauder } from '@/content/hero'
 
 export interface CredentialEntry {
-  /** The position held, set as the row's lead line. */
+  /** The lead line: a role, an award, a certificate. */
   role: string
-  organisation: string
-  /** One concrete line, e.g. an intended specialisation. */
+  /** Second line. Absent on awards and certificates, where the name says it. */
+  organisation?: string
+  /** One concrete line, e.g. a specialisation or where the work was done. */
   descriptor?: string
   /** Date range. Omitted rather than guessed. */
   period?: string
+  /** Outcome, set where the result is the point rather than the dates. */
+  result?: string
   href?: string
-}
-
-export interface CredentialAction {
-  label: string
-  href: string
-  external?: boolean
 }
 
 export interface CredentialSection {
@@ -24,19 +21,20 @@ export interface CredentialSection {
   /** Stands in where there is nothing to list yet. Stated plainly rather
    *  than leaving the heading over an empty space. */
   pending?: string
-  /** A link out in place of a list, for anything that lives elsewhere. */
-  action?: CredentialAction
 }
 
 /**
  * The record, split by what each part actually is. One undifferentiated list
- * of "experience" put a degree, a board seat and a mandate on the same
- * footing; these are different kinds of thing and a reader skimming for one
- * of them shouldn't have to read all three.
+ * of "experience" put a degree, a job and a volunteer post on the same
+ * footing; these are different kinds of thing and a reader skimming for one of
+ * them shouldn't have to read all three.
  *
- * Sections with nothing in them yet are still printed, because the absence is
- * itself informative: it says the work exists and isn't published, not that it
- * was never considered.
+ * Every entry here is taken from the résumé, so the two can't contradict each
+ * other in front of a recruiter reading both.
+ *
+ * Sections with nothing in them yet still print, because the absence is itself
+ * informative: it says the work exists and isn't published, not that it was
+ * never considered.
  */
 export const credentialSections: readonly CredentialSection[] = [
   {
@@ -44,11 +42,30 @@ export const credentialSections: readonly CredentialSection[] = [
     label: 'Education',
     entries: [
       {
-        role: 'Sophomore',
+        role: 'Bachelor of Commerce',
         organisation: ubcSauder.name,
-        descriptor: 'BCom, Finance Specialization & Business Technology Management',
+        descriptor: 'Finance Specialization & Business Technology Management',
         period: 'Expected May 2029',
         href: ubcSauder.href,
+      },
+    ],
+  },
+  {
+    id: 'experience',
+    label: 'Experience',
+    entries: [
+      {
+        role: 'Director of Research II',
+        organisation: acresResearch.name,
+        descriptor: 'Jakarta, Indonesia',
+        period: 'June 2024 - Present',
+        href: acresResearch.href,
+      },
+      {
+        role: 'Project Support',
+        organisation: 'Pertamina Retail',
+        descriptor: 'Jakarta, Indonesia',
+        period: 'August 2024 - December 2024',
       },
     ],
   },
@@ -57,11 +74,45 @@ export const credentialSections: readonly CredentialSection[] = [
     label: 'Boards & Memberships',
     entries: [
       {
-        role: 'Director of Research II',
-        organisation: acresResearch.name,
-        period: 'June 2024 - Present',
-        href: acresResearch.href,
+        role: 'Curriculum Head',
+        organisation: 'SIS Investment Club',
+        descriptor: 'Jakarta, Indonesia',
+        period: 'January 2025 - May 2025',
       },
+      {
+        role: 'Founder',
+        organisation: 'Hopeful Hearts Indonesia',
+        descriptor: 'Jakarta, Indonesia',
+        period: 'January 2024 - May 2025',
+      },
+    ],
+  },
+  {
+    id: 'awards',
+    label: 'Awards',
+    entries: [
+      {
+        role: 'Junior Economic Club of Canada Writing Competition',
+        result: '1st place',
+      },
+      {
+        role: 'International Economics Olympiad Essay Challenge',
+        result: 'Top 25 global',
+      },
+      {
+        role: 'Deloitte × TransLink TechStrat Case Competition',
+        result: 'Semi-finalist, top 5 of 50',
+      },
+    ],
+  },
+  {
+    id: 'certifications',
+    label: 'Certifications',
+    entries: [
+      { role: 'Bloomberg Market Concepts' },
+      { role: 'Bloomberg Finance Fundamentals' },
+      { role: 'Financial Modeling & Valuation Analyst', result: 'In progress' },
+      { role: 'Impact Investing Summer School' },
     ],
   },
   {

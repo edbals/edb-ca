@@ -1,6 +1,6 @@
 import { getMarketSnapshot } from '@/lib/market/snapshot'
 import { marketStatus, type StatusTone } from '@/lib/market/status'
-import type { MarketGroup, MarketQuote } from '@/lib/market/types'
+import type { EconomicRelease, MarketGroup, MarketQuote } from '@/lib/market/types'
 import { SectionHeading } from '@/components/ds/section-heading'
 import { cn } from '@/lib/utils'
 
@@ -29,6 +29,62 @@ function asOfLabel(asOf?: string): string | undefined {
   if (Number.isNaN(parsed.getTime())) return asOf
 
   return parsed.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000
+
+/** Same local-midnight rule as `asOfLabel`, for the same reason. */
+function parseCalendarDate(value: string): Date | null {
+  const parsed = new Date(DATE_ONLY.test(value) ? `${value}T00:00:00` : value)
+  return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+
+/** "Today" / "Tomorrow" / "in 4 days" , the thing a reader actually wants. */
+function countdown(date: Date, now: Date): string {
+  const startOfDay = (value: Date) =>
+    new Date(value.getFullYear(), value.getMonth(), value.getDate()).getTime()
+  const days = Math.round((startOfDay(date) - startOfDay(now)) / MS_PER_DAY)
+
+  if (days <= 0) return 'Today'
+  if (days === 1) return 'Tomorrow'
+  return `in ${days} days`
+}
+
+function Calendar({ releases }: { releases: readonly EconomicRelease[] }) {
+  const now = new Date()
+
+  return (
+    <div className="border-rule rounded-panel mt-6 overflow-hidden border">
+      <div className="border-rule bg-paper-raised border-b px-4.5 py-2.5">
+        <h3 className="micro text-ink-tertiary">
+          Next releases{' '}
+          <span className="text-ink-quaternary font-semibold normal-case">/ FRED</span>
+        </h3>
+      </div>
+
+      <ul>
+        {releases.map((release) => {
+          const date = parseCalendarDate(release.date)
+          return (
+            <li
+              key={release.id}
+              className="border-rule grid grid-cols-[auto_1fr_auto] items-baseline gap-3.5 border-b px-4.5 py-2.5 last:border-b-0"
+            >
+              <span className="mono-data text-ink-tertiary text-xs whitespace-nowrap">
+                {date
+                  ? date.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
+                  : release.date}
+              </span>
+              <span className="text-body-sm">{release.name}</span>
+              <span className="mono-data text-ink-quaternary text-xs whitespace-nowrap">
+                {date ? countdown(date, now) : ''}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
 }
 
 function QuoteRow({ quote }: { quote: MarketQuote }) {
@@ -72,23 +128,23 @@ function Group({ group }: { group: MarketGroup }) {
   )
 }
 
-/**
- * The market update at the foot of the page. Every figure is the latest
- * published observation from an official source, and each panel names the
- * source and the date it was published , these are not intraday quotes, and
- * presenting a monthly Treasury average as if it were live would be the one
- * genuinely misleading thing this section could do.
- *
- * Rendered on the server and revalidated on a fixed cadence, so a visitor
- * never waits on four third-party APIs and the APIs never see per-visitor
- * traffic. A source that fails is named rather than hidden.
- */
 const STATUS_TONE: Record<StatusTone, { dot: string; text: string }> = {
   fresh: { dot: 'bg-up', text: 'text-up' },
   closed: { dot: 'bg-ink-quaternary', text: 'text-ink-tertiary' },
   stale: { dot: 'bg-ink-quaternary', text: 'text-ink-tertiary' },
 }
 
+/**
+ * The market panel at the foot of the page. Every figure is the latest
+ * published observation from an official source, and each panel names the
+ * source and the date it was published , these are not intraday quotes, and
+ * presenting a monthly Treasury average as if it were live would be the one
+ * genuinely misleading thing this section could do.
+ *
+ * Rendered on the server and revalidated on a fixed cadence, so a visitor
+ * never waits on five third-party APIs and the APIs never see per-visitor
+ * traffic. A source that fails is named rather than hidden.
+ */
 export async function MarketUpdate() {
   const snapshot = await getMarketSnapshot()
   const status = marketStatus(snapshot)
@@ -151,6 +207,8 @@ export async function MarketUpdate() {
           </div>
         </div>
       )}
+
+      {snapshot.calendar.length > 0 ? <Calendar releases={snapshot.calendar} /> : null}
     </section>
   )
 }

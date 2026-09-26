@@ -20,13 +20,17 @@ function Entries({ section }: { section: CredentialSection }) {
               <p className="text-title font-semibold group-hover:underline group-hover:underline-offset-4">
                 {entry.role}
               </p>
-              {entry.period ? (
+              {/* Dates for a post, the outcome for an award , whichever one
+                  is the point of the entry sits in the same column. */}
+              {entry.period || entry.result ? (
                 <p className="mono-data text-ink-tertiary text-xs whitespace-nowrap">
-                  {entry.period}
+                  {entry.period ?? entry.result}
                 </p>
               ) : null}
             </div>
-            <p className="text-ink-secondary text-body">{entry.organisation}</p>
+            {entry.organisation ? (
+              <p className="text-ink-secondary text-body">{entry.organisation}</p>
+            ) : null}
             {entry.descriptor ? (
               <p className="text-ink-tertiary text-body-sm">{entry.descriptor}</p>
             ) : null}
