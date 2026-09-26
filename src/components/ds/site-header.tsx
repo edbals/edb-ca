@@ -228,7 +228,7 @@ export function SiteHeader({
                   <a
                     href={link.href}
                     {...externalLinkProps(link.external)}
-                    className="text-body-sm text-ink-secondary"
+                    className="text-body-sm text-ink-secondary -my-1 inline-block py-1"
                   >
                     {link.label}
                   </a>

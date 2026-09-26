@@ -35,7 +35,7 @@ export function SubpageHeader({
     <header>
       <Link
         href={backHref}
-        className="group text-ink-tertiary hover:text-ink inline-flex items-center gap-2 text-body-sm transition-colors"
+        className="group text-ink-tertiary hover:text-ink -my-1.5 inline-flex items-center gap-2 py-1.5 text-body-sm transition-colors"
       >
         {/* Angle bracket rather than a drawn arrow, matching the > that marks
             every forward link on the site. */}

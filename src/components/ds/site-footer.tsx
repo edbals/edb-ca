@@ -62,7 +62,9 @@ export function SiteFooter({
                   <a
                     href={link.href}
                     {...externalLinkProps(link.external)}
-                    className="text-ink-secondary hover:text-ink text-body self-start transition-colors"
+                    // -my-1.5/py-1.5 grows the touch target past the 24px
+                    // floor without opening up the visual spacing of the list.
+                    className="text-ink-secondary hover:text-ink text-body -my-1.5 inline-block self-start py-1.5 transition-colors"
                   >
                     {link.label}
                   </a>
@@ -75,7 +77,10 @@ export function SiteFooter({
         <div className="border-rule mt-8 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t pt-4">
           <p className="micro text-ink-quaternary">{copyright}</p>
           {topLink ? (
-            <a href={topLink.href} className="micro link-rule text-ink-quaternary">
+            <a
+              href={topLink.href}
+              className="micro link-rule text-ink-quaternary -my-1.5 inline-block py-1.5"
+            >
               {topLink.label}
             </a>
           ) : null}

@@ -55,6 +55,13 @@ function SocialDocument({
             title={title}
             loading="lazy"
             allow="encrypted-media"
+            // Scripts and same-origin are what the networks' own embed pages
+            // need to render at all. What is deliberately withheld is
+            // top-level navigation: without it the embed cannot steer this
+            // page somewhere else, which is the one thing a framed third
+            // party should never be able to do.
+            sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+            referrerPolicy="strict-origin-when-cross-origin"
             className="bg-paper rounded-image w-full max-w-[540px]"
             style={{ height: `${frameHeight}px`, border: 0 }}
           />
