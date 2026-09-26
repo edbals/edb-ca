@@ -27,16 +27,13 @@ function byYearDescending(a: { year?: string }, b: { year?: string }): number {
  */
 export function Research() {
   const entries = [...researchEntries].sort(byYearDescending)
-  const years = entries.map((entry) => Number(entry.year)).filter(Number.isFinite)
-  const range = years.length > 0 ? `${Math.min(...years)}–${Math.max(...years)}` : undefined
 
   return (
     <section className="shell py-16 md:py-21">
-      <SectionHeading
-        id="research"
-        title="Research"
-        aside={[`${entries.length} pieces`, range].filter(Boolean).join(' · ')}
-      />
+      {/* No count or year range here: the listing below prints a year on
+          every row, so a summary above it only restates what the reader is
+          about to read. */}
+      <SectionHeading id="research" title="Research" />
 
       <Terminal path="~/research" className="mt-8">
         <TerminalCommand command="ls research/ --sort=date" />

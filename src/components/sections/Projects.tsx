@@ -19,7 +19,8 @@ const CATEGORY: Record<string, string> = {
 export function Projects() {
   return (
     <section className="shell py-16 md:py-21">
-      <SectionHeading id="projects" title="Projects" aside={`${projectEntries.length} tools`} />
+      {/* No count here: two cards sitting right below it already say "two". */}
+      <SectionHeading id="projects" title="Projects" />
 
       <div className="mt-8 grid gap-9 md:grid-cols-2 md:gap-10">
         {projectEntries.map((project, index) => (
