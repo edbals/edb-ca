@@ -119,7 +119,7 @@ export default async function OpenGraphImage() {
               maxWidth: 800,
             }}
           >
-            Equity research, macro notes, and tools for understanding markets.
+            Sophomore at UBC Sauder.
           </div>
         </div>
 
