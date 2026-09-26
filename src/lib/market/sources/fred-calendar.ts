@@ -9,9 +9,18 @@ const MAX_RELEASES = 6
 
 /**
  * FRED publishes release dates for several hundred series, most of them
- * obscure. Matching on name rather than on release id keeps the filter
- * readable and survives FRED renumbering anything, at the cost of being
- * slightly fuzzy , which is the right trade for a sidebar of six dates.
+ * obscure, so the calendar shows only these.
+ *
+ * Matched exactly, not by substring. Substring matching on "Gross Domestic
+ * Product" also caught "Debt to Gross Domestic Product Ratios", "…by Industry"
+ * and "…by State", which between them filled four of six rows with variations
+ * on one release and pushed CPI and PPI off the list entirely.
+ *
+ * The cost is that a rename at FRED drops a release silently rather than
+ * matching loosely. For a list of six that is the right way round: a missing
+ * row is better than five near-duplicates.
+ *
+ * Names are copied from a live response, and each one is displayed as-is.
  */
 const NOTABLE = [
   'Consumer Price Index',
@@ -19,11 +28,26 @@ const NOTABLE = [
   'Gross Domestic Product',
   'Personal Income and Outlays',
   'Producer Price Index',
-  'Advance Monthly Sales for Retail',
-  'Industrial Production',
-  'FOMC',
-  'Federal Open Market Committee',
+  'Advance Monthly Sales for Retail and Food Services',
+  'G.17 Industrial Production and Capacity Utilization',
 ]
+
+/** Shorter labels for the two releases whose official names are unreadable. */
+const DISPLAY_NAME: Record<string, string> = {
+  'Advance Monthly Sales for Retail and Food Services': 'Retail Sales (advance)',
+  'G.17 Industrial Production and Capacity Utilization': 'Industrial Production',
+}
+
+/**
+ * A scheduled release lands on one date in a three-week window, occasionally
+ * two. Anything appearing more often is a continuously-updated feed that FRED
+ * lists against every date rather than an event with a date.
+ *
+ * This is not hypothetical: FRED's "FOMC Press Release" comes back on all 22
+ * days of the window, so matching it by name alone produced a calendar that
+ * announced an FOMC release today, tomorrow and every day after.
+ */
+const MAX_DATES_PER_RELEASE = 2
 
 interface FredReleaseDate {
   release_id?: number
@@ -39,8 +63,10 @@ function isoDate(date: Date): string {
   return date.toISOString().slice(0, 10)
 }
 
+const NOTABLE_SET = new Set<string>(NOTABLE)
+
 function isNotable(name: string): boolean {
-  return NOTABLE.some((needle) => name.toLowerCase().includes(needle.toLowerCase()))
+  return NOTABLE_SET.has(name)
 }
 
 export function isCalendarConfigured(): boolean {
@@ -71,8 +97,9 @@ export async function fetchEconomicCalendar(now = new Date()): Promise<readonly 
 
   if (!Array.isArray(rows)) throw new MarketSourceError(SOURCE, 'no release dates returned')
 
-  const seen = new Set<string>()
-  const releases: EconomicRelease[] = []
+  // Collect the candidates first: whether a name is a scheduled release or a
+  // rolling feed can only be judged once the whole window has been read.
+  const datesByName = new Map<string, Set<string>>()
 
   for (const row of rows) {
     const date = row.date
@@ -80,15 +107,24 @@ export async function fetchEconomicCalendar(now = new Date()): Promise<readonly 
     if (typeof date !== 'string' || typeof name !== 'string') continue
     if (date < start || !isNotable(name)) continue
 
-    // FRED lists a release once per series it covers, so the same name and
-    // date can appear many times over.
-    const key = `${date}-${name}`
-    if (seen.has(key)) continue
-    seen.add(key)
-
-    releases.push({ id: key, date, name })
-    if (releases.length >= MAX_RELEASES) break
+    // FRED lists a release once per series it covers, so a name and date pair
+    // can appear many times over; a Set collapses them.
+    const dates = datesByName.get(name) ?? new Set<string>()
+    dates.add(date)
+    datesByName.set(name, dates)
   }
+
+  const releases: EconomicRelease[] = []
+
+  for (const [name, dates] of datesByName) {
+    if (dates.size > MAX_DATES_PER_RELEASE) continue
+    for (const date of dates) {
+      releases.push({ id: `${date}-${name}`, date, name: DISPLAY_NAME[name] ?? name })
+    }
+  }
+
+  releases.sort((a, b) => a.date.localeCompare(b.date))
+  releases.splice(MAX_RELEASES)
 
   if (releases.length === 0) {
     throw new MarketSourceError(SOURCE, 'no notable releases in the window')
