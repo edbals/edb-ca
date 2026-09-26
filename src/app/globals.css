@@ -3,76 +3,98 @@
 /* ============================================================
    EDBERT SUNARPO , DESIGN SYSTEM
    Tailwind v4, CSS-first. No tailwind.config.
-   Light only: warm paper canvas with ink editorial bands.
+
+   White ground, bold sans headlines with hard size contrast,
+   one accent used for links / tags / focus, and generous air.
+   The retro-finance note is deliberately confined to two
+   surfaces , the research command line and the ticker , rather
+   than being spread over the page as texture. Restraint is what
+   keeps those two moments legible as a choice.
+
+   Light only, deliberately. Every colour is painted explicitly.
    ============================================================ */
 
 @theme {
-  /* ---------- Type families ---------- */
-  --font-serif: var(--font-instrument-serif), 'Times New Roman', Times, serif;
+  /* ---------- Type families ----------
+     Sans carries everything: headlines, body, chrome. Serif is
+     reserved for the wordmark alone, so the one serif on the page
+     always means "this is his name". Mono carries every figure and
+     the command line. */
   --font-sans: var(--font-instrument-sans), 'Helvetica Neue', Arial, sans-serif;
-  --font-accent: var(--font-space-grotesk), var(--font-instrument-sans), sans-serif;
+  --font-serif: var(--font-instrument-serif), Palatino, 'Times New Roman', serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* ---------- Type scale (fluid, editorial) ---------- */
-  /* The whole scale is set one step back from its original size, so more
-     of the page reads at once without any single element being resized on
-     its own. Display type takes the full reduction; body copy takes less,
-     since running text stops being comfortable below about 15px. */
-  /* Ceiling raised from 6.4rem: the hero is the only thing that uses this
-     token, and on wide desktop the line was capping out well before the
-     column had room to keep growing, leaving flat space beside it. */
-  --text-display: clamp(2.1rem, 8.25vw, 7.5rem);
-  --text-display--line-height: 0.94;
-  --text-display--letter-spacing: -0.02em;
+  /* ---------- Type scale ----------
+     Size contrast does the work that weight variety would otherwise
+     have to: two weights (400 and 600) across a wide scale. */
+  --text-lead: clamp(1.55rem, 3.6vw, 2.4rem);
+  --text-lead--line-height: 1.22;
+  --text-lead--letter-spacing: -0.025em;
 
-  --text-heading-lg: clamp(1.7rem, 5.25vw, 3.4rem);
-  --text-heading-lg--line-height: 1;
-  --text-heading-lg--letter-spacing: -0.015em;
+  --text-heading-lg: clamp(1.9rem, 4.4vw, 2.9rem);
+  --text-heading-lg--line-height: 1.06;
+  --text-heading-lg--letter-spacing: -0.028em;
 
-  --text-heading: clamp(1.35rem, 3.4vw, 2.1rem);
-  --text-heading--line-height: 1.08;
-  --text-heading--letter-spacing: -0.01em;
+  --text-heading: clamp(1.5rem, 3vw, 2rem);
+  --text-heading--line-height: 1.1;
+  --text-heading--letter-spacing: -0.025em;
 
-  --text-subheading: clamp(1.1rem, 2.25vw, 1.35rem);
-  --text-subheading--line-height: 1.2;
+  --text-subheading: 1.32rem;
+  --text-subheading--line-height: 1.18;
+  --text-subheading--letter-spacing: -0.022em;
 
-  --text-title: 0.9375rem;
-  --text-title--line-height: 1.4;
+  --text-title: 1.05rem;
+  --text-title--line-height: 1.3;
+  --text-title--letter-spacing: -0.015em;
 
   --text-body: 0.9375rem;
   --text-body--line-height: 1.6;
 
-  --text-body-sm: 0.8125rem;
+  --text-body-sm: 0.875rem;
   --text-body-sm--line-height: 1.55;
 
   /* ---------- Radii ---------- */
-  --radius-button: 0.125rem;
-  --radius-pill: 999px;
-  --radius-image: 0.75rem;
+  --radius-button: 0.25rem;
+  --radius-tag: 0.1875rem;
+  --radius-image: 0.375rem;
+  --radius-panel: 0.5rem;
   --radius-round: 50%;
 
-  /* ---------- Colors (light is the source of truth) ---------- */
-  --color-paper: #f0efe5;
-  --color-paper-raised: #f7f6ef;
-  --color-ink: #252522;
-  --color-ink-secondary: #4c4a44;
-  --color-ink-tertiary: #7d7a71;
-  --color-ink-quaternary: #a8a49a;
-  --color-ink-inverse: #f0efe5;
-  --color-sage: #cedad7;
-  --color-smoked-wood: #393430;
-  --color-rule: #d8d6c9;
-  --color-rule-strong: #b9b6a7;
-  --color-wash: #e6e4d8;
+  /* ---------- Colours ---------- */
+  --color-paper: #ffffff;
+  --color-paper-raised: #f7f7f4;
+  --color-wash: #eeeeea;
+  --color-ink: #16181d;
+  --color-ink-secondary: #585d68;
+  --color-ink-tertiary: #8b909c;
+  --color-ink-quaternary: #b4b8c0;
+  --color-ink-inverse: #ffffff;
+  --color-rule: #e6e6e2;
+  --color-rule-strong: #cfd0cb;
 
-  /* ---------- Motion ----------
-     One curve carries almost everything: a long, decelerating settle that
-     arrives quickly and comes to rest slowly, so type appears to be placed
-     on the page rather than flown in. `--ease-rule` is symmetric, used for
-     hairlines drawing themselves, which should read as a single stroke.
-     These were referenced before they existed, which silently invalidated
-     every transition that used them. */
+  /* The single accent: links, category tags, focus rings, the one
+     coloured thing in a headline. A deep teal-green rather than a
+     bright one, so it sits on white without vibrating. */
+  --color-accent: #0b6b5b;
+  --color-accent-soft: #e7f1ee;
+
+  /* Semantic, and separate from the accent: these only ever encode
+     direction on a figure, never brand. */
+  --color-up: #0f7a45;
+  --color-down: #c4362b;
+
+  /* Terminal. Scoped to the command line and the ticker. */
+  --color-term: #111417;
+  --color-term-raised: #1a1e22;
+  --color-term-hover: #181d20;
+  --color-term-rule: #272c31;
+  --color-term-fg: #7bdba3;
+  --color-term-dim: #5d8f74;
+  --color-term-faint: #465a4f;
+  --color-term-down: #e88b7a;
+
+  /* ---------- Motion ---------- */
   --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-rule: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 /* ------------------------------------------------------------
@@ -84,109 +106,36 @@
     scroll-behavior: smooth;
   }
 
-  /* Clear the floating nav when jumping to an anchor. */
+  /* Clear the sticky header when jumping to an anchor. */
   [id] {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 5rem;
   }
 
   body {
     background-color: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-size: var(--text-body);
-    line-height: 1.55;
+    font-size: 1rem;
+    line-height: 1.6;
     overflow-x: hidden;
   }
 
   ::selection {
-    background-color: var(--color-sage);
-    color: #252522;
+    background-color: var(--color-accent-soft);
+    color: var(--color-ink);
   }
 
   :focus-visible {
-    outline: 1px solid var(--color-ink);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    font-family: var(--font-serif);
-    font-weight: 400;
+    font-weight: 600;
     text-wrap: balance;
-  }
-}
-
-/* ------------------------------------------------------------
-   HERO SIGNATURE
-   The wordmark is drawn on like handwriting: each glyph traces its
-   outline, then the fill arrives behind it, then the whole line
-   clears so the loop can start again. Every path is normalised with
-   pathLength="1", so one keyframe set fits glyphs of any length.
-   ------------------------------------------------------------ */
-
-@keyframes signature-draw {
-  0% {
-    stroke-dashoffset: 1;
-    opacity: 1;
-  }
-  28% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-  86% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-  96% {
-    stroke-dashoffset: 0;
-    opacity: 0;
-  }
-  100% {
-    stroke-dashoffset: 1;
-    opacity: 0;
-  }
-}
-
-@keyframes signature-fill {
-  0%,
-  20% {
-    fill-opacity: 0;
-  }
-  42%,
-  86% {
-    fill-opacity: 1;
-  }
-  96%,
-  100% {
-    fill-opacity: 0;
-  }
-}
-
-.signature-glyph {
-  fill: var(--color-ink);
-  fill-opacity: 0;
-  stroke: var(--color-ink);
-  stroke-width: 9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation:
-    signature-draw var(--signature-loop, 6s) var(--signature-delay, 0s) linear infinite,
-    signature-fill var(--signature-loop, 6s) var(--signature-delay, 0s) linear infinite;
-}
-
-/* Anyone who has asked for less motion gets the finished wordmark,
-   set solid, with no drawing and no loop. */
-@media (prefers-reduced-motion: reduce) {
-  .signature-glyph {
-    animation: none;
-    fill-opacity: 1;
-    stroke-width: 0;
-    stroke-dashoffset: 0;
-    opacity: 1;
   }
 }
 
@@ -194,109 +143,104 @@
    UTILITIES
    ------------------------------------------------------------ */
 
-/* 11px uppercase micro-label , used for numbers, meta, eyebrows */
+/* The 11px uppercase label carrying eyebrows, meta and button text. */
 @utility micro {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  line-height: 1.2;
-  letter-spacing: 0.1em;
+  font-size: 0.6875rem;
+  line-height: 1.25;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 700;
 }
 
-/* Figures, source lines, and chart furniture: the sans with lining,
-   tabular numerals so columns of numbers stay aligned. */
+/* Every figure on the site. Tabular, so columns stay aligned as
+   values change and a ticker doesn't jitter as it scrolls. */
 @utility mono-data {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.01em;
 }
 
-/* Underline-only link: a hairline sits under the text at rest, matching
-   every other rule on the page, and a second stroke draws in from the
-   left on hover rather than the rule simply changing color. Same device
-   as `AnimatedRule`, at hover speed instead of scroll speed. */
+@utility shell {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 72rem;
+  padding-inline: 20px;
+  @media (width >= 48rem) {
+    padding-inline: 32px;
+  }
+}
+
+/* Underline-on-hover link, for secondary text links. */
 @utility link-rule {
-  position: relative;
-  display: inline-block;
   color: inherit;
   text-decoration: none;
   padding-bottom: 1px;
   border-bottom: 1px solid var(--color-rule-strong);
-  &::after {
-    content: '';
-    position: absolute;
-    inset: auto 0 -1px 0;
-    height: 1px;
-    background-color: var(--color-ink);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 320ms var(--ease-standard);
-  }
-  &:hover::after {
-    transform: scaleX(1);
+  transition:
+    color 180ms var(--ease-standard),
+    border-color 180ms var(--ease-standard);
+  &:hover {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
   }
 }
 
-/* Full-bleed dark band: re-scopes the SAME token names locally,
-   so any component nested inside inverts without knowing about it. */
-@utility band-dark {
-  --color-paper: #252522;
-  --color-paper-raised: #302c28;
-  --color-ink: #f0efe5;
-  --color-ink-secondary: #cbc7bb;
-  --color-ink-tertiary: #969185;
-  --color-ink-quaternary: #6e6a62;
-  --color-ink-inverse: #252522;
-  --color-rule: #3c3833;
-  --color-rule-strong: #55504a;
-  --color-wash: #2c2926;
-  background-color: var(--color-paper);
-  color: var(--color-ink);
-}
-
-/* Frosted nav only. Falls back to solid when transparency is reduced. */
-@utility glass {
-  background-color: color-mix(in oklab, var(--color-paper) 72%, transparent);
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .glass {
-    background-color: var(--color-paper-raised);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+/* ------------------------------------------------------------
+   THE TICKER
+   The track holds the row twice and travels exactly -50%, so at
+   the end of the cycle the second copy sits where the first one
+   began and the loop has no seam.
+   ------------------------------------------------------------ */
+@keyframes ticker-roll {
+  to {
+    transform: translateX(-50%);
   }
 }
 
-/* Editorial grid: 7 cols desktop / 4 tablet / 2 mobile */
-@utility grid-editorial {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  @media (width >= 48rem) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-roll var(--ticker-duration, 58s) linear infinite;
+}
+
+/* Paused on hover, so a figure can actually be read. */
+.ticker-viewport:hover .ticker-track,
+.ticker-viewport:focus-within .ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
   }
-  @media (width >= 80rem) {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 30px;
+  50% {
+    opacity: 0.25;
   }
 }
 
-/* Page gutters mirroring the reference: 16 / 20 / 30 */
-@utility shell {
-  width: 100%;
-  margin-inline: auto;
-  max-width: 90rem;
-  padding-inline: 16px;
-  @media (width >= 48rem) {
-    padding-inline: 20px;
+.live-dot {
+  animation: live-pulse 2.4s var(--ease-standard) infinite;
+}
+
+/* The command line's blinking caret. */
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
   }
-  @media (width >= 80rem) {
-    padding-inline: 30px;
+  50%,
+  100% {
+    opacity: 0;
   }
+}
+
+.caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  background-color: var(--color-term-fg);
+  vertical-align: -0.16em;
+  animation: caret-blink 1.15s steps(1) infinite;
 }
 
 /* ------------------------------------------------------------
@@ -310,5 +254,19 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* The ticker stops being a marquee and becomes a scrollable strip,
+     so every figure stays reachable rather than clipped. */
+  .ticker-track {
+    animation: none;
+  }
+
+  .ticker-viewport {
+    overflow-x: auto;
+  }
+
+  .caret {
+    animation: none;
   }
 }

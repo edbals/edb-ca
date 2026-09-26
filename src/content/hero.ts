@@ -16,12 +16,6 @@ export interface HeroCompany {
   href?: string
 }
 
-export const investorMuda: HeroCompany = {
-  name: 'Investor Muda',
-  logo: { src: '/logos/investor-muda.png', width: 214, height: 214 },
-  href: 'https://www.instagram.com/investor.muda/?hl=en',
-}
-
 export const acresResearch: HeroCompany = {
   name: 'Acres Research',
   // The mark spells "Acres", so the chip only needs to add "Research".

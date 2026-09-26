@@ -1,13 +1,12 @@
-import { Instrument_Sans, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import { Instrument_Sans, Instrument_Serif } from "next/font/google";
 
 /**
- * Three faces, each with one job.
+ * Two faces, each with one job.
  *
- * Serif: headings, titles, subheadings. The reading voice of the page.
- * Sans:  body copy and chrome. Quiet by design.
- * Accent: company chips only. Space Grotesk has odd, drawn letterforms that
- *         make the lockups feel like objects set into the prose rather than
- *         more running text.
+ * Sans:  everything , headlines, body copy and chrome. Size and weight
+ *         carry the hierarchy rather than a third family.
+ * Serif:  the wordmark alone, so the one serif on the page always reads as
+ *         his name rather than as another kind of heading.
  */
 export const serifDisplay = Instrument_Serif({
   subsets: ["latin"],
@@ -24,9 +23,3 @@ export const sansText = Instrument_Sans({
   display: "swap",
 });
 
-export const accentType = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["500", "700"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-});

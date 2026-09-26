@@ -56,3 +56,6 @@ Purpose_AI_Stocks_Pivot.md
 
 # Local dev tool config, not site content
 .mcp.json
+
+# design preview scratch
+.preview/

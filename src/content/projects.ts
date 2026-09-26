@@ -48,6 +48,7 @@ export const projectEntries: ProjectEntry[] = [
     description:
       'A portfolio risk analysis tool that backtests historical performance and breaks down overall portfolio risk to the individual holding, showing investors which positions actually drive volatility, drawdowns, and portfolio exposure.',
     thumbnail: '/images/project-risk-engine.jpg',
+    visual: 'risk',
     liveUrl: 'https://riskcalculatorv1.vercel.app',
     comingSoon: true,
     caseStudy: {

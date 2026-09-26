@@ -22,7 +22,7 @@ export interface ProjectEntry {
   /** Static image used unless `visual` names a live component instead. */
   thumbnail: string
   /** Renders the project's own output as artwork in place of a screenshot. */
-  visual?: 'payoff'
+  visual?: 'payoff' | 'risk'
   /** The live product. When set, the title links here, not to the case study. */
   liveUrl?: string
   /** Marks the thumbnail as work in progress rather than a shipped screenshot. */
