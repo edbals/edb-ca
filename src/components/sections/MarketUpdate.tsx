@@ -192,8 +192,8 @@ export async function MarketUpdate() {
 
           <div className="border-rule bg-paper-raised mt-4.5 border-t px-4.5 py-3.5">
             <p className="text-ink-tertiary text-xs">
-              Latest published observations, not intraday quotes, so these do not move while an
-              exchange is open. Rechecked every 15 minutes.
+              Shows the latest official prices, not live market swings. Data stays static during
+              trading hours and updates every 15 minutes.
             </p>
             <p className="text-ink-quaternary mt-2 text-xs">
               Sources: Bank of Canada Valet, European Central Bank via Frankfurter, U.S. Treasury

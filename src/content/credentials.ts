@@ -21,6 +21,10 @@ export interface CredentialSection {
   /** Stands in where there is nothing to list yet. Stated plainly rather
    *  than leaving the heading over an empty space. */
   pending?: string
+  /** Folds shut by default. For the supporting record , memberships, awards,
+   *  certificates , which matter to a reader who is checking, and are noise to
+   *  one who is skimming. */
+  collapsed?: boolean
 }
 
 /**
@@ -71,6 +75,7 @@ export const credentialSections: readonly CredentialSection[] = [
   },
   {
     id: 'boards',
+    collapsed: true,
     label: 'Boards & Memberships',
     entries: [
       {
@@ -89,6 +94,7 @@ export const credentialSections: readonly CredentialSection[] = [
   },
   {
     id: 'awards',
+    collapsed: true,
     label: 'Awards',
     entries: [
       {
@@ -107,6 +113,7 @@ export const credentialSections: readonly CredentialSection[] = [
   },
   {
     id: 'certifications',
+    collapsed: true,
     label: 'Certifications',
     entries: [
       { role: 'Bloomberg Market Concepts' },
