@@ -1,87 +1,72 @@
 import Link from 'next/link'
-import { ArrowLeft, ArrowUpRight } from 'lucide-react'
-import { Reveal } from '@/components/ds/reveal'
-import { TagList } from '@/components/ds/tag'
-
-export interface SubpageAction {
-  label: string
-  href: string
-}
+import { Tag } from '@/components/ds/tag'
 
 export interface SubpageHeaderProps {
   backLabel: string
   backHref: string
-  title: string
-  /** Optional line under the title, set in serif at subheading size. */
-  subtitle?: string
-  /** Metadata pills: tags, category, outlet. Falsy entries are dropped. */
-  tags?: readonly (string | undefined)[]
+  /** The piece's own category, set as the accent chip. */
+  category?: string
+  /** The publication that carried it, set quietly beside the category. */
+  outlet?: string
   year?: string
-  /** Outbound action, e.g. "Visit the live site" or "Open the original". */
-  action?: SubpageAction
+  title: string
+  /** The piece's own subtitle, as printed on the document. */
+  subtitle?: string
+  /** One sentence under the title. The entry's own description. */
+  dek?: string
 }
 
 /**
- * The masthead every subpage opens with. Both the project case studies and
- * the research pages render through this one component rather than keeping
- * their own copies, which is what let them drift apart on measure, metadata
- * treatment and spacing.
+ * The masthead every subpage opens with. Both the case studies and the
+ * research pages render through this one component, which is what keeps them
+ * from drifting apart on measure and metadata treatment.
  */
 export function SubpageHeader({
   backLabel,
   backHref,
+  category,
+  outlet,
+  year,
   title,
   subtitle,
-  tags = [],
-  year,
-  action,
+  dek,
 }: SubpageHeaderProps) {
-  const visibleTags = tags.filter((tag): tag is string => Boolean(tag))
-
   return (
-    <Reveal>
-      {/* A bordered pill rather than a bare underline: it reads as a
-          control at a glance, and gives the small target enough hit area
-          to be comfortable on touch. */}
+    <header>
       <Link
         href={backHref}
-        className="group micro border-rule text-ink-secondary hover:border-ink hover:text-ink inline-flex items-center gap-2 rounded-pill border px-4 py-2 transition-colors"
+        className="group text-ink-tertiary hover:text-ink -my-1.5 inline-flex items-center gap-2 py-1.5 text-body-sm transition-colors"
       >
-        <ArrowLeft
-          size={14}
-          strokeWidth={1.75}
+        {/* Angle bracket rather than a drawn arrow, matching the > that marks
+            every forward link on the site. */}
+        <span
           aria-hidden="true"
-          className="transition-transform duration-300 ease-out group-hover:-translate-x-0.5"
-        />
+          className="mono-data inline-block transition-transform duration-300 ease-out group-hover:-translate-x-0.5"
+        >
+          &lt;
+        </span>
         {backLabel}
       </Link>
 
-      <h1 className="mt-10 max-w-[20ch] font-serif text-heading-lg text-ink">{title}</h1>
+      <div className="mt-6 flex flex-wrap items-center gap-2.5">
+        {category ? <Tag>{category}</Tag> : null}
+        {outlet ? <Tag tone="plain">{outlet}</Tag> : null}
+        {year ? <span className="micro mono-data text-ink-tertiary">{year}</span> : null}
+      </div>
+
+      <h1 className="text-heading-lg mt-4 max-w-[24ch]">{title}</h1>
 
       {subtitle ? (
-        <p className="mt-4 max-w-[34ch] font-serif text-subheading text-ink-tertiary">{subtitle}</p>
+        <p className="text-ink-tertiary mt-3 max-w-[44ch] text-subheading font-normal">
+          {subtitle}
+        </p>
       ) : null}
 
-      <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-        <TagList items={visibleTags} />
-        {year ? <span className="micro text-ink-quaternary">{year}</span> : null}
-        {action ? (
-          <a
-            href={action.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group micro inline-flex items-center gap-1.5 text-ink transition-opacity hover:opacity-70"
-          >
-            {action.label}
-            <ArrowUpRight
-              size={13}
-              strokeWidth={1.75}
-              aria-hidden="true"
-              className="transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </a>
-        ) : null}
-      </div>
-    </Reveal>
+      {dek ? (
+        <p className="text-ink-secondary mt-3.5 max-w-[52ch] text-[1.0625rem] leading-relaxed">
+          {dek}
+        </p>
+      ) : null}
+    </header>
   )
 }

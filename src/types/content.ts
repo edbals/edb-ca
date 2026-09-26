@@ -22,7 +22,7 @@ export interface ProjectEntry {
   /** Static image used unless `visual` names a live component instead. */
   thumbnail: string
   /** Renders the project's own output as artwork in place of a screenshot. */
-  visual?: 'payoff'
+  visual?: 'payoff' | 'risk'
   /** The live product. When set, the title links here, not to the case study. */
   liveUrl?: string
   /** Marks the thumbnail as work in progress rather than a shipped screenshot. */
@@ -67,7 +67,9 @@ export interface ResearchEntry {
   subtitle?: string
   description?: string
   thumbnail?: string
-  /** The question the piece set out to answer. */
+  /** The question the piece set out to answer. Kept on the entries but no
+   *  longer rendered: the subpages lead with the document and the findings.
+   *  Left in place rather than deleted so the written text isn't lost. */
   purpose?: string
   /** Conclusions reached, not a summary of the document. */
   findings?: readonly string[]

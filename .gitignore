@@ -32,6 +32,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...but the example carries no secrets and is the only place the optional
+# API keys are documented, so it has to be tracked.
+!.env*.example
 
 # vercel
 .vercel
@@ -56,3 +59,6 @@ Purpose_AI_Stocks_Pivot.md
 
 # Local dev tool config, not site content
 .mcp.json
+
+# design preview scratch
+.preview/

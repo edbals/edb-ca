@@ -6,5 +6,6 @@ export interface NavLink {
 /** Root relative hashes so links work from /projects/[slug] pages too. */
 export const navLinks: NavLink[] = [
   { label: 'Projects', href: '/#projects' },
-  { label: 'Research', href: '/#research' },
+  { label: 'Publications', href: '/#publications' },
+  { label: 'Markets', href: '/#markets' },
 ]

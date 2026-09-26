@@ -1,27 +1,23 @@
-import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-export type TagVariant = 'outline' | 'solid' | 'plain'
-
 export interface TagProps {
-  children: ReactNode
-  variant?: TagVariant
+  children: string
+  /** Quiet variant for anything that isn't a category, e.g. an outlet. */
+  tone?: 'accent' | 'plain'
   className?: string
 }
 
 /**
- * Metadata label. `plain` is the default list-row treatment (no chrome),
- * `outline` is the pill used inside image tiles and project rows.
+ * The category chip. One accent rather than a colour per category: six hues
+ * would turn an index into a legend the reader has to learn, and the category
+ * word already says what the piece is.
  */
-export function Tag({ children, variant = 'outline', className }: TagProps) {
+export function Tag({ children, tone = 'accent', className }: TagProps) {
   return (
     <span
       className={cn(
-        'micro inline-flex items-center whitespace-nowrap',
-        variant === 'outline' &&
-          'rounded-pill border border-rule-strong px-2.5 py-1 text-ink-secondary',
-        variant === 'solid' && 'rounded-pill bg-ink px-2.5 py-1 text-ink-inverse',
-        variant === 'plain' && 'text-ink-tertiary',
+        'micro rounded-tag inline-block px-2 py-[3px]',
+        tone === 'accent' ? 'bg-accent-soft text-accent' : 'bg-wash text-ink-secondary',
         className,
       )}
     >
@@ -30,21 +26,20 @@ export function Tag({ children, variant = 'outline', className }: TagProps) {
   )
 }
 
-export interface TagListProps {
+export function TagList({
+  items,
+  className,
+}: {
   items: readonly string[]
-  variant?: TagVariant
   className?: string
-}
-
-export function TagList({ items, variant = 'outline', className }: TagListProps) {
+}) {
   if (items.length === 0) return null
+
   return (
-    <ul className={cn('flex flex-wrap items-center gap-x-2 gap-y-2', className)}>
+    <div className={cn('flex flex-wrap items-center gap-2', className)}>
       {items.map((item) => (
-        <li key={item}>
-          <Tag variant={variant}>{item}</Tag>
-        </li>
+        <Tag key={item}>{item}</Tag>
       ))}
-    </ul>
+    </div>
   )
 }

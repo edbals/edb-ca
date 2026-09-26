@@ -1,15 +1,13 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { ArrowUpRight } from 'lucide-react'
 import type { ResearchSource } from '@/types/content'
 import { researchEntries } from '@/content/research'
 import { socialEmbedUrl } from '@/lib/social-embed'
-import { externalLinkProps } from '@/lib/external-link'
 import { Reveal } from '@/components/ds/reveal'
 import { SubpageHeader } from '@/components/ds/subpage-header'
-import { MediaFrame } from '@/components/ds/media-frame'
+import { ButtonLink } from '@/components/ds/button'
+import { PdfViewer } from '@/components/ds/pdf-viewer'
 import { NumberedList } from '@/components/ds/numbered-list'
-import { DocumentPanel } from '@/components/ds/document-panel'
 
 interface ResearchPageProps {
   params: Promise<{ slug: string }>
@@ -23,101 +21,72 @@ export async function generateMetadata({ params }: ResearchPageProps): Promise<M
   const { slug } = await params
   const entry = researchEntries.find((item) => item.id === slug)
   if (!entry) return {}
-  // No title: subpages inherit the root `title.default` so the tab always
-  // reads "Ed Sunarpo" rather than a truncated page name.
+  // No title: subpages inherit the root title so the tab always reads
+  // "Ed Sunarpo" rather than a truncated page name.
   return { description: entry.description }
 }
 
-/**
- * The document, sized to be read rather than glanced at. A PDF renders in
- * place; a social post cannot be framed without third party scripts, so it
- * is presented as a card that opens the original instead of a broken embed.
- */
-function SourceDocument({ source, title }: { source?: ResearchSource; title: string }) {
-  if (!source) {
-    return (
-      <MediaFrame aspect="4/3" center>
-        <p className="micro text-ink-tertiary">Document coming soon</p>
-      </MediaFrame>
-    )
-  }
-
-  if (source.kind === 'pdf') {
-    return (
-      <MediaFrame>
-        <object
-          data={source.href}
-          type="application/pdf"
-          className="rounded-image h-[75vh] min-h-[32rem] w-full"
-        >
-          {/* Shown when the browser has no inline PDF viewer, which is the
-              norm on mobile Safari and Android Chrome. */}
-          <div className="grid h-[24rem] place-items-center p-8 text-center">
-            <div>
-              <p className="text-body text-ink-secondary">
-                Your browser can&apos;t display this PDF inline.
-              </p>
-              <a
-                href={source.href}
-                {...externalLinkProps(true)}
-                className="micro border-ink text-ink hover:bg-ink hover:text-ink-inverse mt-5 inline-flex items-center gap-2 rounded-pill border px-5 py-2.5 transition-colors"
-              >
-                Open the PDF
-                <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-        </object>
-      </MediaFrame>
-    )
-  }
-
+/** A social post, framed from the network's own script-free embed page. */
+function SocialDocument({
+  source,
+  title,
+}: {
+  source: Extract<ResearchSource, { kind: 'social' }>
+  title: string
+}) {
   const embedUrl = source.embedUrl ?? socialEmbedUrl(source.network, source.href)
   // Instagram stacks a header and an action bar around the media, so a
   // portrait post needs noticeably more room than the media alone.
-  const defaultHeight = source.network === 'Instagram' ? 880 : 620
-  const frameHeight = source.embedHeight ?? defaultHeight
+  const frameHeight = source.embedHeight ?? (source.network === 'Instagram' ? 880 : 620)
 
   return (
-    <MediaFrame>
-      {embedUrl ? (
-        <div className="flex flex-col items-center gap-4 p-4 md:p-6">
-          {/* The post itself, framed from the network's own script-free embed
-              page so none of their tracking bundles load into this site. */}
+    <div className="border-rule rounded-panel overflow-hidden border">
+      <div className="border-rule bg-paper-raised flex flex-wrap items-center gap-2.5 border-b px-3.5 py-2.5">
+        <span className="micro text-ink-tertiary">Published on {source.network}</span>
+        <ButtonLink href={source.href} external tone="secondary" size="sm" className="ml-auto">
+          Open
+        </ButtonLink>
+      </div>
+
+      <div className="bg-wash grid place-items-center p-4 md:p-6">
+        {embedUrl ? (
           <iframe
             src={embedUrl}
             title={title}
             loading="lazy"
             allow="encrypted-media"
-            className="bg-paper w-full max-w-[540px] rounded-image"
+            // Scripts and same-origin are what the networks' own embed pages
+            // need to render at all. What is deliberately withheld is
+            // top-level navigation: without it the embed cannot steer this
+            // page somewhere else, which is the one thing a framed third
+            // party should never be able to do.
+            sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+            referrerPolicy="strict-origin-when-cross-origin"
+            className="bg-paper rounded-image w-full max-w-[540px]"
             style={{ height: `${frameHeight}px`, border: 0 }}
           />
-          <a
-            href={source.href}
-            {...externalLinkProps(true)}
-            className="micro text-ink-secondary hover:text-ink inline-flex items-center gap-1.5 transition-colors"
-          >
-            Open on {source.network}
-            <ArrowUpRight size={13} strokeWidth={1.75} aria-hidden="true" />
-          </a>
-        </div>
-      ) : (
-        <div className="grid aspect-[4/3] place-items-center p-8 text-center">
-          <div>
-            <p className="micro text-ink-tertiary">Published on {source.network}</p>
-            <a
-              href={source.href}
-              {...externalLinkProps(true)}
-              className="micro border-ink text-ink hover:bg-ink hover:text-ink-inverse mt-5 inline-flex items-center gap-2 rounded-pill border px-5 py-2.5 transition-colors"
-            >
-              Open on {source.network}
-              <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
-            </a>
-          </div>
-        </div>
-      )}
-    </MediaFrame>
+        ) : (
+          <p className="text-ink-tertiary py-16 text-body-sm">
+            This post can only be read on {source.network}.
+          </p>
+        )}
+      </div>
+    </div>
   )
+}
+
+function SourceDocument({ source, title }: { source?: ResearchSource; title: string }) {
+  if (!source) {
+    return (
+      <div className="border-rule rounded-panel text-ink-tertiary grid aspect-[4/3] place-items-center border border-dashed text-body-sm">
+        Document coming soon
+      </div>
+    )
+  }
+
+  if (source.kind === 'pdf') return <PdfViewer href={source.href} title={title} />
+
+  return <SocialDocument source={source} title={title} />
 }
 
 export default async function ResearchPage({ params }: ResearchPageProps) {
@@ -126,56 +95,50 @@ export default async function ResearchPage({ params }: ResearchPageProps) {
 
   if (!entry) notFound()
 
+  const hasAnalysis = Boolean(entry.findings?.length)
+
   return (
-    <main className="shell pt-28 pb-28 md:pt-36">
-      {/* No outbound action here on purpose: the document panel below
-          already carries its own open link right next to the content
-          itself, so repeating it in the header was the same link twice
-          on one page. */}
+    <main className="shell pt-11 pb-18 md:pt-14">
       <SubpageHeader
-        backLabel="Back to research"
-        backHref="/#research"
+        backLabel="Publications"
+        backHref="/#publications"
+        category={entry.category}
+        outlet={entry.outlet}
+        year={entry.year}
         title={entry.title}
         subtitle={entry.subtitle}
-        tags={[entry.category, entry.outlet]}
-        year={entry.year}
+        dek={entry.description}
       />
 
-      <Reveal delay={80} className="mt-12">
-        <DocumentPanel
-          label="Summary"
-          document={<SourceDocument source={entry.source} title={entry.title} />}
-        >
-          <div className="flex flex-col gap-10">
-            {entry.description ? (
-              <p className="font-serif text-subheading text-ink">{entry.description}</p>
-            ) : null}
+      {/* The document leads and the analysis runs beside it on wide screens,
+          stacking beneath it on narrow ones. No collapsible panel: hiding the
+          writing behind a toggle meant most readers never saw it. */}
+      <Reveal delay={60} className="mt-9">
+        <div className="grid gap-9 lg:grid-cols-[1.45fr_1fr] lg:gap-11">
+          <div className="min-w-0">
+            <SourceDocument source={entry.source} title={entry.title} />
+          </div>
 
-            {entry.purpose ? (
-              <div className="border-rule border-t pt-6">
-                <p className="micro text-ink-tertiary">Purpose</p>
-                <p className="mt-4 text-body text-ink-secondary">{entry.purpose}</p>
-              </div>
-            ) : null}
-
+          {/* Sticks beside the document on wide screens, so the findings stay
+              readable while the reader scrolls through the PDF rather than
+              scrolling away from them. */}
+          <div className="flex flex-col gap-6 lg:sticky lg:top-20 lg:self-start">
             {entry.findings && entry.findings.length > 0 ? (
-              <div className="border-rule border-t pt-6">
-                <p className="micro text-ink-tertiary">Findings</p>
-                <div className="mt-4">
+              <div>
+                <h2 className="micro text-ink-tertiary">Findings</h2>
+                <div className="mt-3">
                   <NumberedList items={entry.findings} divided={false} />
                 </div>
               </div>
             ) : null}
 
-            {!entry.purpose && !entry.findings ? (
-              <div className="border-rule border-t pt-6">
-                <p className="text-body-sm text-ink-tertiary">
-                  The written analysis for this piece is still being prepared.
-                </p>
-              </div>
+            {!hasAnalysis ? (
+              <p className="text-ink-tertiary text-body-sm">
+                The written analysis for this piece is still being prepared.
+              </p>
             ) : null}
           </div>
-        </DocumentPanel>
+        </div>
       </Reveal>
     </main>
   )

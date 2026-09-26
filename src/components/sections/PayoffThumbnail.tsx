@@ -62,7 +62,7 @@ export function PayoffThumbnail() {
   const transition = { duration: 0.8, ease: [0.32, 0.72, 0, 1] as const };
 
   return (
-    <div className="absolute inset-0 bg-[linear-gradient(150deg,#35342f_0%,#252522_55%,#1b1a18_100%)]">
+    <div className="absolute inset-0 bg-[linear-gradient(150deg,#1f242a_0%,#141a1d_55%,#0e1214_100%)]">
       <svg
         viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`}
         preserveAspectRatio="xMidYMid slice"
@@ -72,8 +72,8 @@ export function PayoffThumbnail() {
       >
         <defs>
           <linearGradient id="thumb-profit" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#cedad7" stopOpacity="0.34" />
-            <stop offset="100%" stopColor="#cedad7" stopOpacity="0" />
+            <stop offset="0%" stopColor="#7bdba3" stopOpacity="0.30" />
+            <stop offset="100%" stopColor="#7bdba3" stopOpacity="0" />
           </linearGradient>
           <clipPath id="thumb-above">
             <rect x="0" y="0" width={VIEW_WIDTH} height={ZERO_Y} />
@@ -90,7 +90,7 @@ export function PayoffThumbnail() {
             y1={PAD_Y * 0.4}
             x2={toX(spot)}
             y2={VIEW_HEIGHT - PAD_Y * 0.4}
-            stroke="rgba(240,239,229,0.09)"
+            stroke="rgba(123,219,163,0.10)"
             strokeWidth="1"
           />
         ))}
@@ -100,7 +100,7 @@ export function PayoffThumbnail() {
           y1={ZERO_Y}
           x2={toX(SPOT_MAX)}
           y2={ZERO_Y}
-          stroke="rgba(240,239,229,0.28)"
+          stroke="rgba(123,219,163,0.30)"
           strokeWidth="1"
           strokeDasharray="4 5"
         />
@@ -116,8 +116,8 @@ export function PayoffThumbnail() {
           initial={{ d: areaPath(index) }}
           animate={{ d: areaPath(index) }}
           transition={transition}
-          fill="#f0efe5"
-          fillOpacity="0.09"
+          fill="#e2654a"
+          fillOpacity="0.16"
           clipPath="url(#thumb-below)"
         />
         <motion.path
@@ -125,7 +125,7 @@ export function PayoffThumbnail() {
           animate={{ d: linePath(index) }}
           transition={transition}
           fill="none"
-          stroke="#f0efe5"
+          stroke="#7bdba3"
           strokeWidth="3"
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -133,7 +133,7 @@ export function PayoffThumbnail() {
       </svg>
 
       <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 p-4">
-        <span className="size-1.5 shrink-0 rounded-full bg-[#cedad7]" aria-hidden="true" />
+        <span className="size-1.5 shrink-0 rounded-full bg-[#7bdba3]" aria-hidden="true" />
         <AnimatePresence mode="wait">
           <motion.span
             key={strategy.id}
@@ -141,7 +141,7 @@ export function PayoffThumbnail() {
             animate={{ opacity: 1, y: 0 }}
             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -5 }}
             transition={{ duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
-            className="micro text-[#f0efe5]/80"
+            className="micro text-[#7bdba3]/85"
           >
             {strategy.name}
           </motion.span>
