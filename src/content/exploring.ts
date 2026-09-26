@@ -6,5 +6,5 @@
 export const exploring: readonly string[] = [
   'Artificial intelligence and electricity',
   'AI-assisted portfolio management strategies & dashboards',
-  'Impact & Sustainable investing',
+  'Impact & sustainable investing',
 ]

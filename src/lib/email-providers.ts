@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import { GmailIcon, OutlookIcon, YahooIcon, DefaultMailIcon } from '@/components/ds/mail-icons'
+import { GmailIcon, OutlookIcon, YahooIcon } from '@/components/ds/mail-icons'
 
 export interface EmailProvider {
   id: string
@@ -62,12 +62,5 @@ export const EMAIL_PROVIDERS: readonly EmailProvider[] = [
     composeUrl: (to) => `https://compose.mail.yahoo.com/?to=${encodeURIComponent(to)}`,
     external: true,
     icon: YahooIcon,
-  },
-  {
-    id: 'default',
-    label: 'Default mail app',
-    composeUrl: (to) => `mailto:${to}`,
-    external: false,
-    icon: DefaultMailIcon,
   },
 ]

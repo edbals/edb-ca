@@ -1,4 +1,3 @@
-import { Mail } from 'lucide-react'
 
 /**
  * Provider marks drawn as single-colour glyphs that inherit the surrounding
@@ -75,6 +74,4 @@ export function YahooIcon({ className }: IconProps) {
 }
 
 /** Anything else: the plain envelope, handed off to the OS. */
-export function DefaultMailIcon({ className }: IconProps) {
-  return <Mail className={className ?? BASE} strokeWidth={1.6} aria-hidden="true" />
-}
+
