@@ -38,7 +38,19 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
-    return [{ source: '/:path*', headers: SECURITY_HEADERS }]
+    return [
+      { source: '/:path*', headers: SECURITY_HEADERS },
+      // The intro is the one page meant to be framed, and only by the site
+      // itself: the homepage lays it over the page. Listed second so these
+      // replace the two framing headers above for this path alone.
+      {
+        source: '/intro/:path*',
+        headers: [
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Content-Security-Policy', value: "frame-ancestors 'self'" },
+        ],
+      },
+    ]
   },
 }
 

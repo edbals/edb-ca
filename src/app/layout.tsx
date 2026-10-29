@@ -8,6 +8,7 @@ import { navLinks } from '@/components/layout/navLinks'
 import { contact } from '@/content/contact'
 import { cvLink } from '@/content/cv'
 import { getMarketSnapshot } from '@/lib/market/snapshot'
+import { Intro, INTRO_GATE_SCRIPT } from '@/components/sections/Intro'
 import './globals.css'
 
 /**
@@ -52,13 +53,21 @@ export default async function RootLayout({
   const snapshot = await getMarketSnapshot()
 
   return (
-    <html lang="en" className={`${serifDisplay.variable} ${sansText.variable}`}>
+    // The intro gate sets a data attribute on the root before hydration, so the
+    // root's attributes are expected to differ from the server's.
+    <html
+      lang="en"
+      className={`${serifDisplay.variable} ${sansText.variable}`}
+      suppressHydrationWarning
+    >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: INTRO_GATE_SCRIPT }} />
         <noscript>
           <style>{`.reveal{opacity:1!important;transform:none!important}`}</style>
         </noscript>
       </head>
       <body>
+        <Intro />
         <SiteHeader
           wordmark="Ed Sunarpo"
           wordmarkHref="/#top"
