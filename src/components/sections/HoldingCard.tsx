@@ -52,7 +52,7 @@ function Sparkline({ series }: { series: HoldingSeries }) {
       aria-hidden="true"
       viewBox={`0 0 ${CHART_W} ${CHART_H}`}
       preserveAspectRatio="none"
-      className="ml-2.5 inline-block h-5 w-20 align-[-0.2em]"
+      className="h-5 w-20"
     >
       <polyline
         points={linePoints(series.closes, series.low, series.high)}
@@ -68,7 +68,7 @@ function Sparkline({ series }: { series: HoldingSeries }) {
 
 function ReportLink() {
   return (
-    <span className="text-accent ml-auto inline-flex items-center gap-1.5 text-body-sm font-semibold whitespace-nowrap group-hover/holding:underline group-hover/holding:underline-offset-4">
+    <span className="text-accent inline-flex items-center gap-1.5 text-body-sm font-semibold whitespace-nowrap group-hover/holding:underline group-hover/holding:underline-offset-4">
       <svg
         aria-hidden="true"
         width="12"
@@ -87,10 +87,9 @@ function ReportLink() {
 }
 
 /**
- * A holding, as one line like every other entry in the record: ticker and
- * name with a year's sparkline, last price and the day's move, and the link to
- * Ed's report on it. Kept to the weight of the other entries, so one holding
- * doesn't outweigh the rest of the record.
+ * A holding, as one line: ticker and name, a year's sparkline with the last
+ * price and the day's move, and the link to Ed's report on it. Kept to the
+ * weight of the other entries, so one holding doesn't outweigh the record.
  *
  * If the feed is down, the line keeps the name and the link and says the
  * price is unavailable, rather than drawing a stale one.
@@ -98,32 +97,29 @@ function ReportLink() {
 export async function HoldingCard({ entry }: { entry: CredentialEntry & { ticker: string } }) {
   const series = await loadSeries(entry.ticker)
 
+  // One line: who it is, how it is trading, and the report. It wraps at the
+  // gaps between those three on a narrow screen, never inside one of them.
   const body = (
-    <>
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+    <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1.5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
         <p className="text-title font-semibold group-hover/holding:underline group-hover/holding:underline-offset-4">
           <span className="mono-data mr-2">{entry.ticker}</span>
           {entry.role}
-          {series ? <Sparkline series={series} /> : null}
         </p>
         {series ? (
-          <p className="mono-data text-xs whitespace-nowrap">
-            <span className="font-semibold">{formatNumber(series.last, 2)}</span>{' '}
+          <p className="mono-data flex items-center gap-2.5 text-xs whitespace-nowrap">
+            <Sparkline series={series} />
+            <span className="font-semibold">{formatNumber(series.last, 2)}</span>
             <span className={TONE[series.direction]}>
               {ARROW[series.direction]} {signed(series.changePercent, 2)}%
             </span>
           </p>
-        ) : null}
-      </div>
-
-      <div className="mt-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-        {series ? null : (
+        ) : (
           <p className="mono-data text-ink-quaternary text-xs">Live price unavailable right now</p>
         )}
-        {entry.research ? <ReportLink /> : null}
       </div>
-
-    </>
+      {entry.research ? <ReportLink /> : null}
+    </div>
   )
 
   // Research lives on this site, so it opens in place like any other page.
