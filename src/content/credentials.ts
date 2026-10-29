@@ -49,7 +49,7 @@ export const credentialSections: readonly CredentialSection[] = [
         role: 'Bachelor of Commerce',
         organisation: ubcSauder.name,
         descriptor: 'Finance Specialization & Business Technology Management (Intended)',
-        period: 'September 2025 - May 2030',
+        period: 'September 2025 - May 2029',
         href: ubcSauder.href,
       },
     ],
