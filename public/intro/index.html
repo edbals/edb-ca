@@ -106,7 +106,7 @@ tr.n td:first-child{color:var(--muted)}
 <body>
 
 
-<video id="gl" aria-hidden="true" poster="/intro/desk-poster.jpg" muted playsinline preload="auto"><source src="/intro/desk.webm" type="video/webm"><source src="/intro/desk.mp4" type="video/mp4"></video><div class="vig" id="vig"></div>
+<video id="gl" aria-hidden="true" muted playsinline preload="auto"></video><div class="vig" id="vig"></div>
 
 <div id="stage">
   <div class="strip gut"><span class="nav">&lt; &gt;</span><span class="pill" id="sec">Command</span><span class="pill">BIO</span><span class="pill">Related Functions Menu</span><span class="sp"></span><span class="brand">B Terminal</span><span id="clock"></span></div>
@@ -175,6 +175,19 @@ tr.n td:first-child{color:var(--muted)}
   // The desk is a pre-rendered clip: path-traced once, so the browser only has
   // to play a video. If it can't play (blocked, failed, too slow to start),
   // the intro opens straight on the terminal instead of waiting.
+  // Two cuts of the clip: landscape for computers, portrait for phones. Each
+  // ends on that screen's own layout of the terminal, so the dissolve into the
+  // live terminal matches on both. Picked before anything loads, so a phone
+  // never downloads the landscape cut.
+  const cut = matchMedia('(max-aspect-ratio: 1/1)').matches ? 'desk-portrait' : 'desk';
+  gl.poster = `/intro/${cut}-poster.jpg`;
+  for (const [ext, type] of [['webm', 'video/webm'], ['mp4', 'video/mp4']]) {
+    const source = document.createElement('source');
+    source.src = `/intro/${cut}.${ext}`;
+    source.type = type;
+    gl.appendChild(source);
+  }
+  gl.load();
   let hasVideo = !!gl.canPlayType && (gl.canPlayType('video/webm') !== '' || gl.canPlayType('video/mp4') !== '');
   gl.querySelectorAll('source')[1].addEventListener('error', () => { hasVideo = false; });
   function playDesk() {

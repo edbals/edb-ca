@@ -2,16 +2,18 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-/** Set once the intro has played, so a returning visitor goes straight in. */
-export const INTRO_SEEN_KEY = 'edb-intro-seen'
-
 /**
  * Runs before first paint, from the document head. It decides whether the
- * intro plays (first visit, home page, motion allowed) and, if so, marks the
- * root so the page is covered from the very first frame. Deciding later, on
- * hydration, would flash the homepage and then cover it.
+ * intro plays and, if so, marks the root so the page is covered from the very
+ * first frame. Deciding later, on hydration, would flash the homepage and then
+ * cover it.
+ *
+ * The intro plays each time someone arrives at the home page: a typed address,
+ * a link from elsewhere, a new tab. It does not play on a refresh, on back or
+ * forward, or when the visitor came from another page of this site, and never
+ * with reduced motion.
  */
-export const INTRO_GATE_SCRIPT = `(function(){try{if(location.pathname!=='/')return;if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;if(localStorage.getItem('${INTRO_SEEN_KEY}'))return;document.documentElement.dataset.intro='play'}catch(e){}})()`
+export const INTRO_GATE_SCRIPT = `(function(){try{if(location.pathname!=='/')return;if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var n=performance.getEntriesByType('navigation')[0];if(n&&(n.type==='reload'||n.type==='back_forward'))return;if(document.referrer&&new URL(document.referrer).origin===location.origin)return;document.documentElement.dataset.intro='play'}catch(e){}})()`
 
 interface IntroMessage {
   source: 'edb-intro'
@@ -50,11 +52,6 @@ export function Intro() {
     const main = document.body
 
     const close = () => {
-      try {
-        localStorage.setItem(INTRO_SEEN_KEY, '1')
-      } catch {
-        // Private windows can refuse storage; the intro just plays again.
-      }
       delete root.dataset.intro
       setPlaying(false)
     }
