@@ -21,9 +21,6 @@ export interface HoldingSeries {
   /** Move since the previous close, in percent. */
   changePercent: number
   direction: Direction
-  /** Move over the whole window, first close to last. */
-  rangeChangePercent: number
-  rangeDirection: Direction
   high: number
   low: number
   /** Oldest to newest. */
@@ -65,7 +62,6 @@ export async function fetchHoldingSeries(symbol: string): Promise<HoldingSeries>
   const closes = rows.map((row) => row.close)
   const last = closes[closes.length - 1]
   const previous = closes[closes.length - 2]
-  const first = closes[0]
   const change = last - previous
 
   return {
@@ -73,8 +69,6 @@ export async function fetchHoldingSeries(symbol: string): Promise<HoldingSeries>
     last,
     changePercent: (change / previous) * 100,
     direction: directionOf(change),
-    rangeChangePercent: ((last - first) / first) * 100,
-    rangeDirection: directionOf(last - first),
     high: Math.max(...closes),
     low: Math.min(...closes),
     closes,

@@ -45,14 +45,14 @@ async function loadSeries(symbol: string): Promise<HoldingSeries | null> {
   }
 }
 
-/** The inline trend: the same year of closes, small enough to sit in a line. */
+/** A year of closes, small enough to sit beside the name. */
 function Sparkline({ series }: { series: HoldingSeries }) {
   return (
     <svg
       aria-hidden="true"
       viewBox={`0 0 ${CHART_W} ${CHART_H}`}
       preserveAspectRatio="none"
-      className="h-5 w-20"
+      className="ml-2.5 inline-block h-5 w-20 align-[-0.2em]"
     >
       <polyline
         points={linePoints(series.closes, series.low, series.high)}
@@ -68,7 +68,7 @@ function Sparkline({ series }: { series: HoldingSeries }) {
 
 function ReportLink() {
   return (
-    <span className="text-accent inline-flex items-center gap-1.5 text-body-sm font-semibold whitespace-nowrap group-hover/holding:underline group-hover/holding:underline-offset-4">
+    <span className="text-accent ml-auto inline-flex items-center gap-1.5 text-body-sm font-semibold whitespace-nowrap group-hover/holding:underline group-hover/holding:underline-offset-4">
       <svg
         aria-hidden="true"
         width="12"
@@ -88,7 +88,7 @@ function ReportLink() {
 
 /**
  * A holding, as one line like every other entry in the record: ticker and
- * name, last price and the day's move, a small trend line, and the link to
+ * name with a year's sparkline, last price and the day's move, and the link to
  * Ed's report on it. Kept to the weight of the other entries, so one holding
  * doesn't outweigh the rest of the record.
  *
@@ -104,6 +104,7 @@ export async function HoldingCard({ entry }: { entry: CredentialEntry & { ticker
         <p className="text-title font-semibold group-hover/holding:underline group-hover/holding:underline-offset-4">
           <span className="mono-data mr-2">{entry.ticker}</span>
           {entry.role}
+          {series ? <Sparkline series={series} /> : null}
         </p>
         {series ? (
           <p className="mono-data text-xs whitespace-nowrap">
@@ -116,15 +117,7 @@ export async function HoldingCard({ entry }: { entry: CredentialEntry & { ticker
       </div>
 
       <div className="mt-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-        {series ? (
-          <p className="mono-data text-ink-tertiary flex items-center gap-2 text-xs">
-            <Sparkline series={series} />
-            1Y{' '}
-            <span className={TONE[series.rangeDirection]}>
-              {signed(series.rangeChangePercent, 1)}%
-            </span>
-          </p>
-        ) : (
+        {series ? null : (
           <p className="mono-data text-ink-quaternary text-xs">Live price unavailable right now</p>
         )}
         {entry.research ? <ReportLink /> : null}
