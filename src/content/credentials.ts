@@ -48,8 +48,8 @@ export const credentialSections: readonly CredentialSection[] = [
       {
         role: 'Bachelor of Commerce',
         organisation: ubcSauder.name,
-        descriptor: 'Finance Specialization & Business Technology Management',
-        period: 'Expected May 2029',
+        descriptor: 'Finance Specialization & Business Technology Management (Intended)',
+        period: 'September 2025 - May 2029',
         href: ubcSauder.href,
       },
     ],
@@ -98,6 +98,10 @@ export const credentialSections: readonly CredentialSection[] = [
     label: 'Awards',
     entries: [
       {
+        role: 'Outstanding International Scholarship',
+        result: '$15,000',
+      },
+      {
         role: 'Junior Economic Club of Canada Writing Competition',
         result: '1st place',
       },
@@ -106,8 +110,8 @@ export const credentialSections: readonly CredentialSection[] = [
         result: 'Top 25 global',
       },
       {
-        role: 'Deloitte × TransLink TechStrat Case Competition',
-        result: 'Semi-finalist, top 5 of 50',
+        role: 'Deloitte × TransLink Case Competition',
+        result: 'Top 5 of 50',
       },
     ],
   },
@@ -116,10 +120,12 @@ export const credentialSections: readonly CredentialSection[] = [
     collapsed: true,
     label: 'Certifications',
     entries: [
+      { role: 'Financial Modeling & Valuation Analyst', result: 'In progress' },
+      { role: 'Wharton Introduction to Corporate Finance', result: 'In progress' },
       { role: 'Bloomberg Market Concepts' },
       { role: 'Bloomberg Finance Fundamentals' },
-      { role: 'Financial Modeling & Valuation Analyst', result: 'In progress' },
-      { role: 'Impact Investing Summer School' },
+      { role: 'Goldman Sachs Risk Management Job Simulation' },
+      { role: 'Claude 101' },
     ],
   },
   {
