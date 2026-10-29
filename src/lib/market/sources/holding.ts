@@ -18,8 +18,7 @@ interface TwelveDataSeries {
 export interface HoldingSeries {
   symbol: string
   last: number
-  /** Move since the previous close, in price and percent. */
-  change: number
+  /** Move since the previous close, in percent. */
   changePercent: number
   direction: Direction
   /** Move over the whole window, first close to last. */
@@ -29,17 +28,16 @@ export interface HoldingSeries {
   low: number
   /** Oldest to newest. */
   closes: readonly number[]
-  firstDate: string
   asOf: string
-  source: string
 }
 
 /**
- * A year of daily closes for one holding, for the price chart beside it.
+ * A year of daily closes for one holding, for the sparkline beside it.
  *
  * Same key and provider as the index panel, so a holding costs one more
  * request per refresh and no new account. `time_series` rather than `quote`:
- * the closes give the chart, and the last two give the day's move, in one call.
+ * the closes give the sparkline, and the last two give the day's move, in one
+ * call.
  */
 export async function fetchHoldingSeries(symbol: string): Promise<HoldingSeries> {
   const apiKey = process.env.TWELVEDATA_API_KEY
@@ -54,7 +52,7 @@ export async function fetchHoldingSeries(symbol: string): Promise<HoldingSeries>
     throw new MarketSourceError(SOURCE, response.message ?? `responded code ${response.code}`)
   }
 
-  // Newest first as published; the chart reads left to right in time.
+  // Newest first as published; the sparkline reads left to right in time.
   const rows = (response.values ?? [])
     .map((row) => ({ date: row.datetime ?? '', close: Number(row.close) }))
     .filter((row) => row.date && Number.isFinite(row.close))
@@ -73,7 +71,6 @@ export async function fetchHoldingSeries(symbol: string): Promise<HoldingSeries>
   return {
     symbol,
     last,
-    change,
     changePercent: (change / previous) * 100,
     direction: directionOf(change),
     rangeChangePercent: ((last - first) / first) * 100,
@@ -81,8 +78,6 @@ export async function fetchHoldingSeries(symbol: string): Promise<HoldingSeries>
     high: Math.max(...closes),
     low: Math.min(...closes),
     closes,
-    firstDate: rows[0].date,
     asOf: rows[rows.length - 1].date,
-    source: SOURCE,
   }
 }
