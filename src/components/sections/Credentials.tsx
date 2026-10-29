@@ -3,6 +3,7 @@ import {
   type CredentialEntry,
   type CredentialSection,
 } from '@/content/credentials'
+import { HoldingCard } from '@/components/sections/HoldingCard'
 import { externalLinkProps } from '@/lib/external-link'
 import { cn } from '@/lib/utils'
 
@@ -50,9 +51,15 @@ function Body({ section }: { section: CredentialSection }) {
 
   return (
     <div className="flex flex-col gap-5">
-      {section.entries?.map((entry) => (
-        <Entry key={`${entry.role}-${entry.organisation ?? ''}`} entry={entry} />
-      ))}
+      {section.entries?.map((entry) => {
+        const key = `${entry.role}-${entry.organisation ?? ''}`
+        // A listed security gets its price and chart; everything else is a line.
+        return entry.ticker ? (
+          <HoldingCard key={key} entry={{ ...entry, ticker: entry.ticker }} />
+        ) : (
+          <Entry key={key} entry={entry} />
+        )
+      })}
     </div>
   )
 }

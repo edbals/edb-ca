@@ -479,3 +479,16 @@
     --key-travel: 0px;
   }
 }
+
+/* While the intro plays, the page underneath is covered from the first frame
+   and does not scroll; the intro's frame sits above this cover. */
+html[data-intro='play'] body {
+  overflow: hidden;
+}
+html[data-intro='play'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: #06080a;
+}

@@ -12,6 +12,11 @@ export interface CredentialEntry {
   /** Outcome, set where the result is the point rather than the dates. */
   result?: string
   href?: string
+  /** A listed security. Renders as a quote card with its price and chart. */
+  ticker?: string
+  /** Ed's own write-up on this entry, on this site. Links the card there and
+   *  says so, so a holding he has covered is marked as his research. */
+  research?: string
 }
 
 export interface CredentialSection {
@@ -136,6 +141,12 @@ export const credentialSections: readonly CredentialSection[] = [
   {
     id: 'holdings',
     label: 'Reported Holdings',
-    pending: 'Coming soon',
+    entries: [
+      {
+        ticker: 'TLN',
+        role: 'Talen Energy Corporation',
+        research: '/research/talen-energy',
+      },
+    ],
   },
 ]
