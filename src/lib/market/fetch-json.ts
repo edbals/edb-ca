@@ -13,21 +13,13 @@ export class MarketSourceError extends Error {
   }
 }
 
-/**
- * Fetches and parses JSON from a public market endpoint.
- *
- * These are third-party services on the open internet, so every call is
- * bounded by a timeout and a status check, and a failure throws a named
- * error rather than resolving to something half-parsed. The caller decides
- * whether one dead source should take the whole panel down; none of them do.
- */
-export async function fetchMarketJson<T>(source: string, url: string): Promise<T> {
+async function fetchMarket(source: string, url: string, accept: string): Promise<Response> {
   let response: Response
 
   try {
     response = await fetch(url, {
       next: { revalidate: MARKET_REVALIDATE_SECONDS },
-      headers: { accept: 'application/json' },
+      headers: { accept },
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     })
   } catch (cause) {
@@ -39,9 +31,29 @@ export async function fetchMarketJson<T>(source: string, url: string): Promise<T
     throw new MarketSourceError(source, `responded ${response.status}`)
   }
 
+  return response
+}
+
+/**
+ * Fetches and parses JSON from a public market endpoint.
+ *
+ * These are third-party services on the open internet, so every call is
+ * bounded by a timeout and a status check, and a failure throws a named
+ * error rather than resolving to something half-parsed. The caller decides
+ * whether one dead source should take the whole panel down; none of them do.
+ */
+export async function fetchMarketJson<T>(source: string, url: string): Promise<T> {
+  const response = await fetchMarket(source, url, 'application/json')
+
   try {
     return (await response.json()) as T
   } catch {
     throw new MarketSourceError(source, 'response was not valid JSON')
   }
+}
+
+/** The same guarantees, for sources that publish CSV rather than JSON. */
+export async function fetchMarketText(source: string, url: string): Promise<string> {
+  const response = await fetchMarket(source, url, 'text/csv, text/plain')
+  return response.text()
 }

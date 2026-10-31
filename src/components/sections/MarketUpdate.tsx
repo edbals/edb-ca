@@ -82,7 +82,7 @@ const STATUS_TONE: Record<StatusTone, { dot: string; text: string }> = {
  * The market panel at the foot of the page. Every figure is the latest
  * published observation from an official source, and each panel names the
  * source and the date it was published , these are not intraday quotes, and
- * presenting a monthly Treasury average as if it were live would be the one
+ * presenting an end-of-day figure as if it were live would be the one
  * genuinely misleading thing this section could do.
  *
  * Rendered on the server and revalidated on a fixed cadence, so a visitor
@@ -141,7 +141,7 @@ export async function MarketUpdate() {
             </p>
             <p className="text-ink-quaternary mt-2 text-xs">
               Sources: Bank of Canada Valet, European Central Bank via Frankfurter, U.S. Treasury
-              FiscalData, CoinGecko.
+              daily par yield curve, CoinGecko.
             </p>
             {snapshot.failures.length > 0 ? (
               <p className="text-down mt-1.5 text-xs">
