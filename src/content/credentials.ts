@@ -147,6 +147,10 @@ export const credentialSections: readonly CredentialSection[] = [
         role: 'Talen Energy Corporation',
         research: '/research/talen-energy',
       },
+      {
+        ticker: 'VOO',
+        role: 'Vanguard S&P 500 ETF',
+      },
     ],
   },
 ]
