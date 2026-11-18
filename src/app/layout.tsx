@@ -19,7 +19,7 @@ import './globals.css'
  */
 const SITE_URL = 'https://www.edbert.ca'
 const SITE_DESCRIPTION =
-  'Ed Sunarpo. I\'m interested in finance, technology, and product design. Sophomore at UBC Sauder.'
+  'Ed Sunarpo. I\'m interested in finance, technology, and product management. Sophomore at UBC Sauder.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

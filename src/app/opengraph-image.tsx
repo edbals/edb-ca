@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-export const alt = 'Ed Sunarpo — finance, technology, and product design. edbert.ca'
+export const alt = 'Ed Sunarpo — finance, technology, and product management. edbert.ca'
 
 /** LinkedIn, X and Slack all render 1.91:1; 1200x630 is that ratio. */
 export const size = { width: 1200, height: 630 }
@@ -106,7 +106,7 @@ export default async function OpenGraphImage() {
             <span>,&nbsp;</span>
             <span style={{ color: COLOR.accent }}>technology</span>
             <span>,&nbsp;and&nbsp;</span>
-            <span style={{ color: COLOR.accent }}>product design</span>
+            <span style={{ color: COLOR.accent }}>product management</span>
             <span>.</span>
           </div>
 
