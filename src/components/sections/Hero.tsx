@@ -29,7 +29,7 @@ export function Hero() {
     <section id="top" className="shell pt-18 pb-14 md:pt-26 md:pb-18">
       <p className="text-lead max-w-[30ch] font-semibold">
         I&apos;m interested in <Key index={0}>finance</Key>, <Key index={1}>technology</Key>, and{' '}
-        <Key index={2}>product design</Key>.
+        <Key index={2}>product management</Key>.
       </p>
 
       <p className="text-ink-secondary mt-5 max-w-[46ch] text-[1.0625rem] leading-relaxed">
